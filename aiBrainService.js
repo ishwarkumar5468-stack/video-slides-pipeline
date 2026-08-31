@@ -27,13 +27,75 @@ function heuristicBrain(prompt, options = {}) {
   const lower = cleanPrompt.toLowerCase();
 
   let topicTitle = cleanPrompt.charAt(0).toUpperCase() + cleanPrompt.slice(1);
-  let theme = "cyberpunk";
+  let theme = "doodle_whiteboard";
+  let lofiTrack = "cozy-coffee";
+  let voicePersona = "natural-male";
   let intent = `Transform prompt "${cleanPrompt}" into a high-retention, kinetic video storyboard.`;
   let scenesData = [];
 
-  if (lower.includes("window") || lower.includes("rain") || lower.includes("looking at the rain") || lower.includes("standing near")) {
+  if (lower.includes("doodle") || lower.includes("sketch") || lower.includes("whiteboard") || lower.includes("habit") || lower.includes("draw") || lower.includes("simple") || lower.includes("learn") || lower.includes("idea")) {
+    topicTitle = "The Power of Atomic Habits: Doodle Breakdown";
+    theme = "doodle_whiteboard";
+    lofiTrack = "cozy-coffee";
+    voicePersona = "natural-male";
+    intent = "Educational hand-drawn doodle visual breakdown with warm human conversational voice modulation.";
+    scenesData = [
+      {
+        narration: "Big goals often fail because we try to change everything all at once.",
+        glowWord: "Change Everything",
+        mood: "hook",
+        sfx: "word-tick",
+        sceneVisualType: "doodle_whiteboard",
+        voiceModulation: { pitch: 0.94, rate: 0.96, tone: "conversational_warm" },
+        videoQuery: "hand drawing sketch paper desk notebook",
+        pictorial: { type: "concept_card", label: "Habit Trap", value: "Overwhelming Friction", subtext: "Why Big Leaps Fail" }
+      },
+      {
+        narration: "Instead, shrinking any action to just two minutes makes starting virtually frictionless.",
+        glowWord: "Two Minutes",
+        mood: "kinetic",
+        sfx: "chime",
+        sceneVisualType: "doodle_whiteboard",
+        voiceModulation: { pitch: 0.96, rate: 1.0, tone: "clear_coach" },
+        videoQuery: "stopwatch timer coffee study table",
+        pictorial: { type: "metric_badge", label: "Startup Barrier", value: "< 120 Seconds", subtext: "Frictionless Action" }
+      },
+      {
+        narration: "A tiny one percent daily improvement compounds into thirty-seven times better in a year.",
+        glowWord: "37x Better",
+        mood: "impact",
+        sfx: "sub-bass",
+        sceneVisualType: "doodle_whiteboard",
+        voiceModulation: { pitch: 0.90, rate: 0.92, tone: "deep_emphasis" },
+        videoQuery: "exponential growth graph whiteboard doodle",
+        pictorial: { type: "tech_hud", label: "Annual Compounding", value: "37.78x Multiplier", subtext: "1.01^365 Math" }
+      },
+      {
+        narration: "Stack your new habit immediately after something you already do every single day.",
+        glowWord: "Habit Stacking",
+        mood: "pulse",
+        sfx: "whoosh",
+        sceneVisualType: "doodle_whiteboard",
+        voiceModulation: { pitch: 0.94, rate: 0.98, tone: "encouraging_guide" },
+        videoQuery: "morning routine coffee book desk",
+        pictorial: { type: "diagram_flow", label: "Anchor Formula", value: "Current Cue → New Habit → Reward", subtext: "Automated Triggers" }
+      },
+      {
+        narration: "Start your first tiny micro-action today and let momentum do the heavy lifting.",
+        glowWord: "Micro-Action Today",
+        mood: "cta",
+        sfx: "chime",
+        sceneVisualType: "doodle_whiteboard",
+        voiceModulation: { pitch: 0.96, rate: 0.98, tone: "motivational_closer" },
+        videoQuery: "notebook pencil checkmark goal completed",
+        pictorial: { type: "circular_gauge", label: "Momentum", value: "100% Active", subtext: "Take Action Now" }
+      }
+    ];
+  } else if (lower.includes("window") || lower.includes("rain") || lower.includes("looking at the rain") || lower.includes("standing near")) {
     topicTitle = "Reflections in the Rain: Quiet Clarity";
-    theme = "cyberpunk";
+    theme = "rain_window";
+    lofiTrack = "rainy-window";
+    voicePersona = "calm-lofi";
     intent = "Atmospheric narrative exploring quiet reflection, perspective, and inner stillness against rainy city window.";
     scenesData = [
       {
@@ -42,6 +104,7 @@ function heuristicBrain(prompt, options = {}) {
         mood: "hook",
         sfx: "sub-bass",
         sceneVisualType: "rain_window",
+        voiceModulation: { pitch: 0.90, rate: 0.92, tone: "intimate_storyteller" },
         videoQuery: "rain on window pane city night lights",
         pictorial: { type: "tech_hud", label: "Mind State", value: "Deep Reflection", subtext: "Atmospheric Stillness" }
       },
@@ -51,6 +114,7 @@ function heuristicBrain(prompt, options = {}) {
         mood: "kinetic",
         sfx: "whoosh",
         sceneVisualType: "rain_window",
+        voiceModulation: { pitch: 0.92, rate: 0.94, tone: "gentle_cadence" },
         videoQuery: "rain drops falling water window glass",
         pictorial: { type: "diagram_flow", label: "Clarity Arc", value: "Noise → Stillness → Insight", subtext: "Perspective Shift" }
       },
@@ -60,6 +124,7 @@ function heuristicBrain(prompt, options = {}) {
         mood: "impact",
         sfx: "laser-glitch",
         sceneVisualType: "rain_window",
+        voiceModulation: { pitch: 0.88, rate: 0.90, tone: "profound_resonance" },
         videoQuery: "rainy night city bokeh neon lights",
         pictorial: { type: "metric_badge", label: "Cognitive Clarity", value: "+300%", subtext: "Solitude & Flow State" }
       },
@@ -69,6 +134,7 @@ function heuristicBrain(prompt, options = {}) {
         mood: "pulse",
         sfx: "whoosh",
         sceneVisualType: "rain_window",
+        voiceModulation: { pitch: 0.92, rate: 0.94, tone: "uplifting_flow" },
         videoQuery: "rain window street reflections night",
         pictorial: { type: "circular_gauge", label: "Focus Depth", value: "99.4%", subtext: "Optimal Creative State" }
       },
@@ -78,13 +144,16 @@ function heuristicBrain(prompt, options = {}) {
         mood: "cta",
         sfx: "celestial-chime",
         sceneVisualType: "rain_window",
+        voiceModulation: { pitch: 0.94, rate: 0.96, tone: "confident_climax" },
         videoQuery: "sunrise after rain city morning light",
         pictorial: { type: "concept_card", label: "Horizon", value: "Unstoppable Vision", subtext: "Manifest Reality" }
       }
     ];
-  } else if (lower.includes("car") || lower.includes("vehicle") || lower.includes("drive") || lower.includes("speed") || lower.includes("cyberpunk city")) {
-    topicTitle = "Cyberpunk Hyperdrive: Midnight Stance";
+  } else if (lower.includes("car") || lower.includes("vehicle") || lower.includes("speed") || lower.includes("cyberpunk city")) {
+    topicTitle = "Cyberpunk Hyperdrive: Midnight Velocity";
     theme = "cyberpunk";
+    lofiTrack = "chillhop-night";
+    voicePersona = "deep-baritone";
     intent = "High-octane neon cyberpunk aesthetic with futuristic vehicle and night skyline.";
     scenesData = [
       {
@@ -93,6 +162,7 @@ function heuristicBrain(prompt, options = {}) {
         mood: "hook",
         sfx: "sub-bass",
         sceneVisualType: "cyber_car",
+        voiceModulation: { pitch: 0.78, rate: 0.90, tone: "cinematic_baritone" },
         videoQuery: "cyberpunk car neon city night street",
         pictorial: { type: "tech_hud", label: "Powertrain", value: "Quantum Dual-Drive", subtext: "1,200 kW Output" }
       },
@@ -102,6 +172,7 @@ function heuristicBrain(prompt, options = {}) {
         mood: "kinetic",
         sfx: "laser-glitch",
         sceneVisualType: "cyber_car",
+        voiceModulation: { pitch: 0.80, rate: 0.94, tone: "dynamic_pacing" },
         videoQuery: "neon sports car driving night city highway",
         pictorial: { type: "diagram_flow", label: "Ignition Sequence", value: "Spool → Hyper-Torque → Vector Thrust", subtext: "Zero Traction Loss" }
       },
@@ -111,6 +182,7 @@ function heuristicBrain(prompt, options = {}) {
         mood: "impact",
         sfx: "rising-riser",
         sceneVisualType: "cyber_car",
+        voiceModulation: { pitch: 0.76, rate: 0.88, tone: "heavy_impact" },
         videoQuery: "fast car speed neon blur lights motion",
         pictorial: { type: "metric_badge", label: "Acceleration", value: "1.85s", subtext: "0-100 km/h Launch" }
       },
@@ -120,6 +192,7 @@ function heuristicBrain(prompt, options = {}) {
         mood: "pulse",
         sfx: "whoosh",
         sceneVisualType: "cyber_car",
+        voiceModulation: { pitch: 0.82, rate: 0.92, tone: "technical_authority" },
         videoQuery: "futuristic car design aerodynamic glowing lights",
         pictorial: { type: "circular_gauge", label: "Downforce", value: "850 kg", subtext: "Dynamic Active Aero" }
       },
@@ -129,273 +202,109 @@ function heuristicBrain(prompt, options = {}) {
         mood: "cta",
         sfx: "celestial-chime",
         sceneVisualType: "cyber_car",
+        voiceModulation: { pitch: 0.80, rate: 0.92, tone: "authoritative_closer" },
         videoQuery: "neon highway driving into glowing city night",
         pictorial: { type: "concept_card", label: "Velocity", value: "Unrestricted", subtext: "Next Generation Drive" }
       }
     ];
-  } else if (lower.includes("ai") || lower.includes("robot") || lower.includes("agent") || lower.includes("neural") || lower.includes("intelligence")) {
-    topicTitle = "Autonomous AI & Cognitive Systems";
-    theme = "cyberpunk";
-    scenesData = [
-      {
-        narration: "Autonomous AI agents are shifting from passive chat assistants into self-governing execution systems.",
-        glowWord: "Self-Governing",
-        mood: "hook",
-        sfx: "sub-bass",
-        videoQuery: "artificial intelligence neural network digital brain",
-        pictorial: { type: "tech_hud", label: "Agent Autonomy", value: "Level 4 Execution", subtext: "Multi-Agent Swarm Logic" }
-      },
-      {
-        narration: "By executing multi-step reasoning loops, modern agents decompose complex enterprise goals into instantaneous actions.",
-        glowWord: "Reasoning Loops",
-        mood: "kinetic",
-        sfx: "laser-glitch",
-        videoQuery: "cyberpunk matrix network data stream",
-        pictorial: { type: "diagram_flow", label: "Agent Pipeline", value: "Perceive → Plan → Tool Use → Verify", subtext: "Zero-Latency Routing" }
-      },
-      {
-        narration: "Benchmark tests demonstrate a four-hundred percent improvement in autonomous task completion accuracy.",
-        glowWord: "400% Improvement",
-        mood: "impact",
-        sfx: "rising-riser",
-        videoQuery: "quantum computing processor technology",
-        pictorial: { type: "metric_badge", label: "Task Accuracy", value: "+400%", subtext: "Multi-Agent Collaboration" }
-      },
-      {
-        narration: "Real-time tool invocation connects foundation models directly with APIs, robotic hardware, and databases.",
-        glowWord: "Real-Time Tools",
-        mood: "pulse",
-        sfx: "whoosh",
-        videoQuery: "futuristic robotics robotic arm factory",
-        pictorial: { type: "circular_gauge", label: "System Latency", value: "45ms", subtext: "Real-Time Sensor Readout" }
-      },
-      {
-        narration: "The future belongs to those who build with intelligent agent architectures today.",
-        glowWord: "Intelligent Architecture",
-        mood: "cta",
-        sfx: "celestial-chime",
-        videoQuery: "modern city technology skyscrapers dusk",
-        pictorial: { type: "concept_card", label: "Next Horizon", value: "AGI Ecosystem", subtext: "Production Deployment Ready" }
-      }
-    ];
-  } else if (lower.includes("quantum") || lower.includes("physics") || lower.includes("superposition")) {
-    topicTitle = "Quantum Computing Acceleration";
-    theme = "cyberpunk";
-    scenesData = [
-      {
-        narration: "Quantum computing is crossing the barrier from experimental theory into commercial advantage.",
-        glowWord: "Commercial Advantage",
-        mood: "hook",
-        sfx: "sub-bass",
-        videoQuery: "quantum particles atom energy glow",
-        pictorial: { type: "tech_hud", label: "Qubit Coherence", value: "99.8% Fidelity", subtext: "Superconducting Transmon Array" }
-      },
-      {
-        narration: "By harnessing superposition, quantum processors compute millions of permutations simultaneously.",
-        glowWord: "Superposition",
-        mood: "kinetic",
-        sfx: "laser-glitch",
-        videoQuery: "abstract blue particle wave motion",
-        pictorial: { type: "diagram_flow", label: "Parallel States", value: "|0⟩ + |1⟩ → Gate Matrix → Readout", subtext: "Exponential Permutations" }
-      },
-      {
-        narration: "Recent benchmarks showcase a ten-thousand-times acceleration in complex molecular simulations.",
-        glowWord: "10,000x Acceleration",
-        mood: "impact",
-        sfx: "rising-riser",
-        videoQuery: "futuristic science lab holographic interface",
-        pictorial: { type: "metric_badge", label: "Compute Speedup", value: "10,000x", subtext: "Vs Classical Supercomputers" }
-      },
-      {
-        narration: "Fault-tolerant error correction is unlocking breakthroughs in clean energy and medicine.",
-        glowWord: "Breakthroughs",
-        mood: "pulse",
-        sfx: "whoosh",
-        videoQuery: "deep space nebula galaxy cosmic stars",
-        pictorial: { type: "circular_gauge", label: "Physical Qubits", value: "1,121 Qubits", subtext: "Logical Error Suppression" }
-      },
-      {
-        narration: "The quantum revolution is officially here—prepare for exponential computation.",
-        glowWord: "Quantum Revolution",
-        mood: "cta",
-        sfx: "celestial-chime",
-        videoQuery: "abstract cyber lights hyper speed",
-        pictorial: { type: "concept_card", label: "Horizon 2026", value: "Quantum Cloud", subtext: "Hybrid Classical Orchestration" }
-      }
-    ];
-  } else if (lower.includes("space") || lower.includes("mars") || lower.includes("rocket") || lower.includes("orbit")) {
-    topicTitle = "Interplanetary Spaceflight & Starships";
-    theme = "cosmic";
-    scenesData = [
-      {
-        narration: "Human civilization is entering a new golden age of deep space exploration.",
-        glowWord: "Golden Age",
-        mood: "hook",
-        sfx: "sub-bass",
-        videoQuery: "rocket launch space stars nebula",
-        pictorial: { type: "tech_hud", label: "Orbital Velocity", value: "28,000 km/h", subtext: "Low Earth Orbit Insertion" }
-      },
-      {
-        narration: "Fully reusable heavy-lift rockets have slashed the cost of orbital payload delivery by ninety percent.",
-        glowWord: "90% Cost Slashed",
-        mood: "kinetic",
-        sfx: "rising-riser",
-        videoQuery: "planet earth from space satellite",
-        pictorial: { type: "metric_badge", label: "Launch Economics", value: "$100 / kg", subtext: "Full Reusability Architecture" }
-      },
-      {
-        narration: "Next-generation plasma and nuclear-thermal thrusters will cut transit times to Mars in half.",
-        glowWord: "Mars in Half",
-        mood: "impact",
-        sfx: "laser-glitch",
-        videoQuery: "mars red planet space exploration",
-        pictorial: { type: "diagram_flow", label: "Transit Arc", value: "Earth Orbit → Propellant Transfer → Mars Entry", subtext: "Deep Space Corridor" }
-      },
-      {
-        narration: "Automated refineries will extract oxygen and methane directly from Martian subsurface glaciers.",
-        glowWord: "In-Situ Fuel",
-        mood: "pulse",
-        sfx: "whoosh",
-        videoQuery: "futuristic colony alien planet futuristic landscape",
-        pictorial: { type: "circular_gauge", label: "Resource Extraction", value: "98% Purity", subtext: "In-Situ Resource Utilization" }
-      },
-      {
-        narration: "A multi-planetary future is no longer a dream—it is being built right now.",
-        glowWord: "Multi-Planetary",
-        mood: "cta",
-        sfx: "celestial-chime",
-        videoQuery: "deep space galaxy nebula stars glowing",
-        pictorial: { type: "concept_card", label: "Human Destiny", value: "Interplanetary", subtext: "Permanent Orbital Presence" }
-      }
-    ];
-  } else if (lower.includes("focus") || lower.includes("habit") || lower.includes("productivity") || lower.includes("dopamine") || lower.includes("brain")) {
-    topicTitle = "Neuroscience of High Performance";
-    theme = "sunset";
-    scenesData = [
-      {
-        narration: "Unlocking peak cognitive focus is the single most valuable superpower in the modern world.",
-        glowWord: "Cognitive Focus",
-        mood: "hook",
-        sfx: "sub-bass",
-        videoQuery: "meditation brain thinking focus calm",
-        pictorial: { type: "circular_gauge", label: "Focus Score", value: "95%", subtext: "Prefrontal Cortex Activation" }
-      },
-      {
-        narration: "Neuroscience shows our brains thrive in ninety-minute ultradian rhythm cycles of intense concentration.",
-        glowWord: "90-Minute Cycles",
-        mood: "kinetic",
-        sfx: "whoosh",
-        videoQuery: "sunset timelapse clouds mountain peaceful",
-        pictorial: { type: "diagram_flow", label: "Ultradian Rhythm", value: "Warmup → Flow State → Recovery", subtext: "Dopamine Alignment" }
-      },
-      {
-        narration: "Eliminating digital distractions reduces attention residue and cognitive fatigue by forty percent.",
-        glowWord: "40% Less Fatigue",
-        mood: "impact",
-        sfx: "laser-glitch",
-        videoQuery: "abstract flowing liquid lights energy",
-        pictorial: { type: "metric_badge", label: "Energy Preserved", value: "+40%", subtext: "Zero Context Switching" }
-      },
-      {
-        narration: "When you protect uninterrupted deep work blocks, creative output multiplies threefold.",
-        glowWord: "3x Output",
-        mood: "pulse",
-        sfx: "rising-riser",
-        videoQuery: "runner athlete morning sunrise focus",
-        pictorial: { type: "comparison_pill", label: "Monotasking vs Multitasking", value: "3.2x Throughput", subtext: "High Leverage Execution" }
-      },
-      {
-        narration: "Master your attention today, and unlock the highest level of your potential.",
-        glowWord: "Master Attention",
-        mood: "cta",
-        sfx: "celestial-chime",
-        videoQuery: "sun rays shining through forest majestic",
-        pictorial: { type: "concept_card", label: "Daily Mastery", value: "Flow State", subtext: "Consistent Peak Performance" }
-      }
-    ];
   } else {
-    // Dynamic universal generator for ANY prompt
-    topicTitle = cleanPrompt.length > 50 ? cleanPrompt.slice(0, 50) + "..." : cleanPrompt;
-    theme = "minimal-tech";
+    // General high-impact topic
+    topicTitle = "Future Breakthroughs: Kinetic Blueprint";
+    theme = "doodle_whiteboard";
+    lofiTrack = "cozy-coffee";
+    voicePersona = "natural-male";
     scenesData = [
       {
-        narration: `Mastering ${topicTitle} is essential for unlocking true strategic breakthroughs.`,
-        glowWord: "Strategic Breakthroughs",
+        narration: `Understanding ${cleanPrompt} begins with stripping away outdated assumptions.`,
+        glowWord: "Outdated Assumptions",
         mood: "hook",
         sfx: "sub-bass",
-        videoQuery: "abstract technology digital particles blue",
-        pictorial: { type: "tech_hud", label: "Core Concept", value: "Primary Driver", subtext: `${topicTitle} Analysis` }
+        sceneVisualType: "doodle_whiteboard",
+        voiceModulation: { pitch: 0.94, rate: 0.96, tone: "clear_hook" },
+        videoQuery: "whiteboard sketching architecture idea concept",
+        pictorial: { type: "tech_hud", label: "Starting Thesis", value: "First Principles", subtext: "Deconstruct Complexity" }
       },
       {
-        narration: `Behind every great achievement in this space is a disciplined understanding of foundational mechanics.`,
-        glowWord: "Foundational Mechanics",
+        narration: "By examining the fundamental mechanisms, hidden leverage points immediately become obvious.",
+        glowWord: "Leverage Points",
         mood: "kinetic",
         sfx: "laser-glitch",
-        videoQuery: "cyberpunk matrix network connection",
-        pictorial: { type: "diagram_flow", label: "Execution Roadmap", value: "Concept → Strategy → Rapid Execution", subtext: "Iterative Feedback Loop" }
+        sceneVisualType: "doodle_whiteboard",
+        voiceModulation: { pitch: 0.96, rate: 0.98, tone: "analytical_flow" },
+        videoQuery: "diagram arrows flow chart whiteboard",
+        pictorial: { type: "diagram_flow", label: "Core Mechanics", value: "Deconstruct → Optimize → Scale", subtext: "Maximum Efficiency" }
       },
       {
-        narration: `Data reveals that implementing these principles creates a three-fold multiplier in overall output.`,
-        glowWord: "3x Multiplier",
+        narration: "Recent innovations demonstrate an unprecedented tenfold increase in overall performance.",
+        glowWord: "Tenfold Increase",
         mood: "impact",
         sfx: "rising-riser",
-        videoQuery: "glowing data analytics abstract graphics",
-        pictorial: { type: "metric_badge", label: "Performance Gain", value: "3.5x Multiplier", subtext: "Verified Empirical Metric" }
+        sceneVisualType: "doodle_whiteboard",
+        voiceModulation: { pitch: 0.88, rate: 0.90, tone: "dramatic_impact" },
+        videoQuery: "exponential curve analytics dashboard",
+        pictorial: { type: "metric_badge", label: "Performance Gain", value: "10x Multiplier", subtext: "Verified Benchmark" }
       },
       {
-        narration: `By focusing on high-leverage execution, you eliminate friction and accelerate results.`,
-        glowWord: "Accelerate Results",
+        narration: "Seamless coordination across every layer turns isolated progress into compounding growth.",
+        glowWord: "Compounding Growth",
         mood: "pulse",
         sfx: "whoosh",
-        videoQuery: "flying above clouds sunset golden hour",
-        pictorial: { type: "circular_gauge", label: "Efficiency Rate", value: "98.4%", subtext: "Optimized Workflow Pipeline" }
+        sceneVisualType: "doodle_whiteboard",
+        voiceModulation: { pitch: 0.92, rate: 0.96, tone: "steady_rhythm" },
+        videoQuery: "interlocking gears mechanisms team motion",
+        pictorial: { type: "circular_gauge", label: "System Sync", value: "99.8%", subtext: "Optimal Integration" }
       },
       {
-        narration: `Take decisive action today and transform your vision into unstoppable reality.`,
-        glowWord: "Decisive Action",
+        narration: "Mastering this paradigm positions you at the absolute forefront of tomorrow's breakthroughs.",
+        glowWord: "Forefront Tomorrow",
         mood: "cta",
         sfx: "celestial-chime",
-        videoQuery: "modern city skyline sunrise neon lights",
-        pictorial: { type: "concept_card", label: "Final Milestone", value: "Peak Execution", subtext: "Realized Potential" }
+        sceneVisualType: "doodle_whiteboard",
+        voiceModulation: { pitch: 0.94, rate: 0.96, tone: "inspirational_call" },
+        videoQuery: "horizon sunrise light city modern dawn",
+        pictorial: { type: "concept_card", label: "Next Step", value: "Execute Vision", subtext: "Leadership Advantage" }
       }
     ];
   }
 
-  // Adjust to requested slide count
-  let finalScenes = scenesData;
-  if (slideCount && slideCount > 0 && slideCount < scenesData.length) {
-    finalScenes = scenesData.slice(0, slideCount);
+  // Adjust count if requested
+  if (scenesData.length > slideCount) {
+    scenesData = scenesData.slice(0, slideCount);
   }
 
   return {
     prompt: cleanPrompt,
     topicTitle: topicTitle,
     theme: theme,
+    lofiTrack: lofiTrack,
+    voicePersona: voicePersona,
     reasoning: {
       intent: intent,
-      targetAudience: "Curious professionals, innovators, and creators seeking high-impact knowledge",
-      narrativeArc: "Hook & Intrigue → Technical Mechanism → Quantitative Proof → Tactical Execution → Inspiring CTA",
-      keyTakeaway: `Key principles of ${topicTitle} distilled into kinetic video format.`
+      targetAudience: "Global learners & ambitious creators",
+      narrativeArc: "Hook → Core Mechanism → Compounding Impact → Call to Action",
+      keyTakeaway: "Clear actionable insight delivered with organic voice inflection and kinetic visual design."
     },
-    scenes: finalScenes.map((s, idx) => ({
+    scenes: scenesData.map((s, idx) => ({
       index: idx,
       narration: s.narration,
       glowWord: s.glowWord,
-      mood: s.mood || "kinetic",
-      sfx: s.sfx || "whoosh",
-      duration: Math.max(3.8, Math.min(7.5, s.narration.split(" ").length * 0.45)),
-      videoQuery: s.videoQuery,
+      mood: s.mood,
+      sfx: s.sfx,
+      sceneVisualType: s.sceneVisualType,
+      voiceModulation: s.voiceModulation || { pitch: 0.94, rate: 0.96 },
+      duration: Math.max(3.5, Math.min(8.0, (s.narration || "").split(" ").length * 0.45)),
+      videoQuery: s.videoQuery || "minimal modern studio motion",
       pictorial: s.pictorial
     }))
   };
 }
 
 /**
- * AI Brain Core: Evaluates any prompt, decomposes intent, and synthesizes complete scene slides.
+ * Main AI Brain Generator with Gemini API + Intelligent Heuristic Fallback
  */
 export async function generateBrainScenes(prompt, options = {}) {
-  if (!prompt || typeof prompt !== "string" || !prompt.trim()) {
-    throw new Error("Prompt is required for the AI Brain");
+  if (!prompt || typeof prompt !== "string") {
+    throw new Error("Prompt must be a non-empty string");
   }
 
   const cleanPrompt = prompt.trim();
@@ -408,24 +317,28 @@ export async function generateBrainScenes(prompt, options = {}) {
 
   if (ai) {
     const systemInstruction = `You are the AI Brain & Chief Kinetic Director of a next-generation video studio.
-Your job is to deeply analyze ANY user prompt, understand its core intent, tone, and knowledge depth, and engineer a sequence of ${slideCount} high-impact, kinetic video scene slides.
+Your job is to deeply analyze ANY user prompt, understand its core intent, emotion, and tone, and engineer a sequence of ${slideCount} high-impact, kinetic video scene slides.
 
 For each scene slide, you must create:
 1. "narration": A punchy, conversational, hook-driven sentence (10-18 words max) optimized for word-by-word kinetic typography.
 2. "glowWord": 1 to 3 words from the sentence that will glow vividly as the key visual anchor.
 3. "mood": One of: "hook" (opening punch), "impact" (mind-blowing stat/breakthrough), "kinetic" (fast motion), "pulse" (rhythmic build), "cta" (closing call to action), "minimal".
-4. "sfx": One of: "sub-bass" (deep cinematic hit), "laser-glitch" (cyber transition), "whoosh" (fast flyby), "celestial-chime" (magical realization), "rising-riser" (tension buildup), "tick" (precise metric readout).
-5. "videoQuery": A 3-5 word high-definition cinematic stock video search query for Pexels (e.g., "tokamak fusion reactor plasma", "cyberpunk neural network brain", "deep space galaxy nebula", "modern skyscrapers dawn").
-6. "pictorial": A sophisticated infographic HUD overlay with:
-   - "type": One of "tech_hud", "metric_badge", "circular_gauge", "diagram_flow", "comparison_pill", "concept_card".
-   - "label": Short title (e.g., "Compute Acceleration", "Energy Density", "Neural Latency").
-   - "value": An eye-catching metric, stat, or short flow (e.g. "10,000x", "99.8% Coherence", "450 Wh/kg", "Plan → Execute → Verify").
-   - "subtext": 3-6 word contextual descriptor.
+4. "sfx": One of: "sub-bass" (deep cinematic hit), "laser-glitch" (cyber transition), "whoosh" (fast flyby), "celestial-chime" (magical realization), "rising-riser" (tension buildup), "word-tick" (precise click), "doodle-stroke" (sketch sound).
+5. "sceneVisualType": One of "doodle_whiteboard" (whiteboard sketch/lightbulb/gears), "minimal_white" (clean gallery editorial), "papercraft_notebook", "rain_window" (rain droplets & silhouette), "cyber_car" (neon car), "astronaut_space", "matrix_terminal", "nature_sunset", "quantum_core".
+6. "voiceModulation": {
+     "pitch": float between 0.75 (deep masculine) and 1.05 (bright),
+     "rate": float between 0.88 (dramatic/storytelling) and 1.08 (high energy),
+     "tone": "conversational_warm" | "deep_baritone" | "intimate_storyteller" | "clear_coach" | "authoritative"
+   }
+7. "videoQuery": A 3-5 word high-definition cinematic stock video search query for Pexels.
+8. "pictorial": A sophisticated infographic HUD overlay with type, label, value, subtext.
 
 Return ONLY a JSON object matching this schema:
 {
   "topicTitle": "Crisp 2-5 word title for the presentation",
-  "theme": "cyberpunk" | "cosmic" | "minimal-tech" | "matrix" | "sunset" | "emerald",
+  "theme": "doodle_whiteboard" | "minimal_white" | "papercraft_notebook" | "rain_window" | "cyberpunk" | "sunset" | "cosmic",
+  "lofiTrack": "cozy-coffee" | "rainy-window" | "chillhop-night" | "acoustic-warmth" | "dreamy-cloud",
+  "voicePersona": "natural-male" | "deep-baritone" | "cinematic-movie" | "calm-lofi" | "energetic-creator",
   "reasoning": {
     "intent": "Brief analysis of the user's goal with this prompt",
     "targetAudience": "Target audience description",
@@ -438,6 +351,8 @@ Return ONLY a JSON object matching this schema:
       "glowWord": "Glow highlight phrase",
       "mood": "hook",
       "sfx": "sub-bass",
+      "sceneVisualType": "doodle_whiteboard",
+      "voiceModulation": { "pitch": 0.92, "rate": 0.96, "tone": "conversational_warm" },
       "videoQuery": "Search query for Pexels video",
       "pictorial": {
         "type": "tech_hud",
@@ -454,10 +369,9 @@ Requested Slide Count: ${slideCount}
 Style/Archetype: "${style}"
 Orientation: "${orientation}"
 
-Create exactly ${slideCount} scene slides that fully understand this prompt and deliver an unforgettable kinetic video experience.`;
+Create exactly ${slideCount} scene slides that fully understand this prompt, specify voice modulation for natural human male delivery, and deliver an unforgettable kinetic experience.`;
 
     try {
-      // Prioritize fast, high-availability models with automatic fallback on transient spikes
       const modelsToTry = ["gemini-3.1-flash-lite", "gemini-flash-latest", "gemini-3.7-flash", "gemini-3.1-pro-preview"];
       for (const model of modelsToTry) {
         let modelSuccess = false;
@@ -482,7 +396,9 @@ Create exactly ${slideCount} scene slides that fully understand this prompt and 
                 brainResult = {
                   prompt: cleanPrompt,
                   topicTitle: parsed.topicTitle || cleanPrompt,
-                  theme: parsed.theme || "cyberpunk",
+                  theme: parsed.theme || "doodle_whiteboard",
+                  lofiTrack: parsed.lofiTrack || "cozy-coffee",
+                  voicePersona: parsed.voicePersona || "natural-male",
                   reasoning: parsed.reasoning || {
                     intent: `Deconstructed prompt: ${cleanPrompt}`,
                     targetAudience: "Curious tech & knowledge audience",
@@ -495,9 +411,10 @@ Create exactly ${slideCount} scene slides that fully understand this prompt and 
                     glowWord: s.glowWord || s.narration?.split(" ")[0] || "Key",
                     mood: s.mood || "kinetic",
                     sfx: s.sfx || "whoosh",
-                    sceneVisualType: s.sceneVisualType || (s.narration?.toLowerCase().includes("rain") || s.narration?.toLowerCase().includes("window") ? "rain_window" : s.narration?.toLowerCase().includes("car") ? "cyber_car" : s.narration?.toLowerCase().includes("space") ? "astronaut_space" : "rain_window"),
+                    sceneVisualType: s.sceneVisualType || (cleanPrompt.toLowerCase().includes("rain") ? "rain_window" : cleanPrompt.toLowerCase().includes("car") ? "cyber_car" : "doodle_whiteboard"),
+                    voiceModulation: s.voiceModulation || { pitch: 0.94, rate: 0.96 },
                     duration: Math.max(3.5, Math.min(8.0, (s.narration || "").split(" ").length * 0.45)),
-                    videoQuery: s.videoQuery || "abstract technology motion",
+                    videoQuery: s.videoQuery || "minimal desk paper coffee sketch",
                     pictorial: s.pictorial || {
                       type: "tech_hud",
                       label: "Analysis Point",
@@ -520,16 +437,13 @@ Create exactly ${slideCount} scene slides that fully understand this prompt and 
               errString.includes("RESOURCE_EXHAUSTED");
 
             if (isTransient && attempt === 0) {
-              // Brief jitter backoff on 503 high demand spike before retry
               await new Promise((resolve) => setTimeout(resolve, 650));
               continue;
             }
             break;
           }
         }
-        if (modelSuccess && brainResult) {
-          break;
-        }
+        if (modelSuccess && brainResult) break;
       }
     } catch (err) {
       console.log("[AI Brain Fallback Notice]: Transitioning to local heuristic engine.");

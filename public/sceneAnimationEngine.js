@@ -1,7 +1,10 @@
 /**
  * Scene Animation Engine
- * Real-time 60 FPS animated character & atmospheric scene renderer for kinetic video slides.
- * Renders procedural atmospheric elements:
+ * Real-time 60 FPS animated character, doodle & atmospheric scene renderer for kinetic video slides.
+ * Renders procedural visuals:
+ * - Doodle & Whiteboard (Hand-drawn lightbulb, rotating sketch gears, animated arrows, thinker doodle, highlighter marks)
+ * - Minimal White Studio (Clean modern gallery layout, architectural crosshairs, minimalist geometric wireframes)
+ * - Papercraft Notebook (Ruled pages, doodle clips, sticky notes)
  * - Rain & Window Glass Pane with Boy / Character Silhouette Looking Outside
  * - Cyberpunk Car with Neon Headlights, Wet Asphalt & Character Stance
  * - Deep Space Floating Astronaut & Planetary Nebula
@@ -15,7 +18,7 @@ class SceneAnimationEngine {
     this.canvas = null;
     this.ctx = null;
     this.animationFrameId = null;
-    this.activeType = "rain_window"; // 'rain_window', 'cyber_car', 'astronaut_space', 'matrix_terminal', 'nature_sunset', 'quantum_core', 'abstract_particles'
+    this.activeType = "doodle_whiteboard"; // 'doodle_whiteboard' | 'minimal_white' | 'papercraft_notebook' | 'rain_window' | 'cyber_car' | 'astronaut_space' | 'matrix_terminal' | 'nature_sunset' | 'quantum_core'
     this.customPrompt = "";
     this.time = 0;
     this.weatherIntensity = 1.0;
@@ -24,8 +27,9 @@ class SceneAnimationEngine {
     this.raindrops = [];
     this.matrixGlyphs = [];
     this.stars = [];
+    this.doodleStars = [];
     this.isEnabled = true;
-    this.opacity = 0.85;
+    this.opacity = 0.90;
 
     this.init();
   }
@@ -33,14 +37,12 @@ class SceneAnimationEngine {
   init() {
     this.canvas = document.getElementById("stage-scene-canvas");
     if (!this.canvas) {
-      // Find or attach canvas into kinetic-stage
       const stage = document.getElementById("kinetic-stage");
       if (stage) {
         this.canvas = document.createElement("canvas");
         this.canvas.id = "stage-scene-canvas";
         this.canvas.className = "absolute inset-0 w-full h-full object-cover pointer-events-none transition-opacity duration-500 z-[1]";
         this.canvas.style.opacity = String(this.opacity);
-        // Insert right after video layer before overlay
         const videoEl = document.getElementById("stage-bg-video");
         if (videoEl && videoEl.nextSibling) {
           stage.insertBefore(this.canvas, videoEl.nextSibling);
@@ -79,7 +81,6 @@ class SceneAnimationEngine {
         len: 0.03 + Math.random() * 0.05,
         thickness: 0.8 + Math.random() * 1.5,
         alpha: 0.3 + Math.random() * 0.5,
-        // Glass trickle droplets
         isGlassTrickle: i % 4 === 0,
         trickleSpeed: 0.002 + Math.random() * 0.005,
         size: 2 + Math.random() * 3
@@ -99,7 +100,22 @@ class SceneAnimationEngine {
       });
     }
 
-    // 3. Matrix Glyphs
+    // 3. Doodle floating sparkles
+    this.doodleStars = [];
+    for (let i = 0; i < 20; i++) {
+      this.doodleStars.push({
+        x: Math.random(),
+        y: Math.random(),
+        size: 8 + Math.random() * 14,
+        speed: 0.0008 + Math.random() * 0.0015,
+        rotationSpeed: (Math.random() - 0.5) * 0.04,
+        rot: Math.random() * Math.PI * 2,
+        alpha: 0.4 + Math.random() * 0.5,
+        color: i % 3 === 0 ? "#eab308" : i % 3 === 1 ? "#06b6d4" : "#f43f5e"
+      });
+    }
+
+    // 4. Matrix Glyphs
     this.matrixGlyphs = [];
     const cols = 24;
     for (let c = 0; c < cols; c++) {
@@ -112,7 +128,7 @@ class SceneAnimationEngine {
       });
     }
 
-    // 4. Floating atmospheric particles
+    // 5. Floating atmospheric particles
     this.particles = [];
     for (let i = 0; i < 40; i++) {
       this.particles.push({
@@ -128,7 +144,7 @@ class SceneAnimationEngine {
   }
 
   setVisualScene(type, options = {}) {
-    this.activeType = type || "rain_window";
+    this.activeType = type || "doodle_whiteboard";
     if (options.prompt) this.customPrompt = options.prompt;
     if (options.characterVisible !== undefined) this.characterVisible = options.characterVisible;
     if (options.opacity !== undefined) {
@@ -137,10 +153,19 @@ class SceneAnimationEngine {
     }
   }
 
-  // Deduce best animated scene type from prompt text or scene object
   determineSceneTypeFromText(text) {
-    if (!text) return "rain_window";
+    if (!text) return "doodle_whiteboard";
     const l = text.toLowerCase();
+    
+    if (l.includes("doodle") || l.includes("sketch") || l.includes("whiteboard") || l.includes("drawing") || l.includes("explain") || l.includes("habit") || l.includes("idea") || l.includes("simple") || l.includes("learn") || l.includes("concept") || l.includes("how to")) {
+      return "doodle_whiteboard";
+    }
+    if (l.includes("clean") || l.includes("minimal") || l.includes("white studio") || l.includes("modern") || l.includes("magazine") || l.includes("design") || l.includes("architecture")) {
+      return "minimal_white";
+    }
+    if (l.includes("notebook") || l.includes("paper") || l.includes("journal") || l.includes("notes") || l.includes("book")) {
+      return "papercraft_notebook";
+    }
     if (l.includes("rain") || l.includes("window") || l.includes("reflection") || l.includes("droplet") || l.includes("glass") || l.includes("standing near the window") || l.includes("storm") || l.includes("look out")) {
       return "rain_window";
     }
@@ -153,13 +178,13 @@ class SceneAnimationEngine {
     if (l.includes("code") || l.includes("hacker") || l.includes("terminal") || l.includes("matrix") || l.includes("cyber") || l.includes("algorithm") || l.includes("software") || l.includes("security")) {
       return "matrix_terminal";
     }
-    if (l.includes("sunset") || l.includes("nature") || l.includes("mountain") || l.includes("habit") || l.includes("meditation") || l.includes("focus") || l.includes("morning") || l.includes("calm")) {
+    if (l.includes("sunset") || l.includes("nature") || l.includes("mountain") || l.includes("meditation") || l.includes("focus") || l.includes("morning") || l.includes("calm")) {
       return "nature_sunset";
     }
-    if (l.includes("quantum") || l.includes("ai") || l.includes("physics") || l.includes("energy") || l.includes("neural") || l.includes("atom")) {
+    if (l.includes("quantum") || l.includes("physics") || l.includes("energy") || l.includes("neural") || l.includes("atom")) {
       return "quantum_core";
     }
-    return "rain_window";
+    return "doodle_whiteboard";
   }
 
   updateFromScene(scene, promptHint = "") {
@@ -188,6 +213,15 @@ class SceneAnimationEngine {
     ctx.clearRect(0, 0, w, h);
 
     switch (this.activeType) {
+      case "doodle_whiteboard":
+        this.drawDoodleWhiteboardScene(ctx, w, h, t);
+        break;
+      case "minimal_white":
+        this.drawMinimalWhiteStudioScene(ctx, w, h, t);
+        break;
+      case "papercraft_notebook":
+        this.drawPapercraftNotebookScene(ctx, w, h, t);
+        break;
       case "rain_window":
         this.drawRainWindowScene(ctx, w, h, t);
         break;
@@ -207,13 +241,469 @@ class SceneAnimationEngine {
         this.drawQuantumCoreScene(ctx, w, h, t);
         break;
       default:
-        this.drawRainWindowScene(ctx, w, h, t);
+        this.drawDoodleWhiteboardScene(ctx, w, h, t);
         break;
     }
   }
 
+  // Line boil wobble helper for organic hand-drawn sketch aesthetic
+  wobble(val, freq = 8, amp = 1.8, seed = 0) {
+    return val + Math.sin(this.time * freq + seed) * amp;
+  }
+
   // -------------------------------------------------------------
-  // 1. RAIN & WINDOW WITH BOY / CHARACTER SILHOUETTE
+  // 1. DOODLE & WHITEBOARD HAND-DRAWN SKETCH SCENE
+  // -------------------------------------------------------------
+  drawDoodleWhiteboardScene(ctx, w, h, t) {
+    const scale = w / 400;
+
+    // 1. Crisp White / Cream Paper Background with subtle dot grid
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, w, h);
+
+    // Subtle Dot Grid (Notebook / Whiteboard Style)
+    ctx.fillStyle = "rgba(100, 116, 139, 0.15)";
+    const dotSpacing = 24 * scale;
+    for (let x = dotSpacing; x < w; x += dotSpacing) {
+      for (let y = dotSpacing; y < h; y += dotSpacing) {
+        ctx.beginPath();
+        ctx.arc(x, y, 1.2 * scale, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    // 2. Hand-Drawn Animated Lightbulb (Top Left / Idea Pop)
+    const bulbX = w * 0.18;
+    const bulbY = h * 0.16;
+    const bulbScale = 1.0 * scale;
+
+    // Pulsing warm yellow glow halo
+    const glowRadius = (28 + Math.sin(t * 5) * 6) * scale;
+    const glowGrad = ctx.createRadialGradient(bulbX, bulbY, 0, bulbX, bulbY, glowRadius);
+    glowGrad.addColorStop(0, "rgba(253, 224, 71, 0.7)");
+    glowGrad.addColorStop(1, "rgba(253, 224, 71, 0)");
+    ctx.fillStyle = glowGrad;
+    ctx.beginPath();
+    ctx.arc(bulbX, bulbY, glowRadius, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Hand-drawn sketch bulb glass body (with organic wobble)
+    ctx.strokeStyle = "#1e293b";
+    ctx.lineWidth = 3.2 * scale;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+
+    ctx.beginPath();
+    ctx.arc(this.wobble(bulbX, 6, 1.2, 1), this.wobble(bulbY, 6, 1.2, 2), 16 * bulbScale, 0.25 * Math.PI, 0.75 * Math.PI, true);
+    ctx.lineTo(bulbX - 7 * bulbScale, bulbY + 16 * bulbScale);
+    ctx.lineTo(bulbX + 7 * bulbScale, bulbY + 16 * bulbScale);
+    ctx.closePath();
+    ctx.stroke();
+
+    // Glowing Filament (M-shape / Loop)
+    ctx.strokeStyle = "#eab308";
+    ctx.lineWidth = 2.4 * scale;
+    ctx.beginPath();
+    ctx.moveTo(bulbX - 5 * bulbScale, bulbY + 12 * bulbScale);
+    ctx.lineTo(bulbX - 3 * bulbScale, bulbY - 3 * bulbScale);
+    ctx.lineTo(bulbX, bulbY + 2 * bulbScale);
+    ctx.lineTo(bulbX + 3 * bulbScale, bulbY - 3 * bulbScale);
+    ctx.lineTo(bulbX + 5 * bulbScale, bulbY + 12 * bulbScale);
+    ctx.stroke();
+
+    // Screw base & contact point
+    ctx.strokeStyle = "#334155";
+    ctx.lineWidth = 2.8 * scale;
+    for (let b = 0; b < 3; b++) {
+      ctx.beginPath();
+      ctx.moveTo(bulbX - 6 * bulbScale, bulbY + (19 + b * 4) * bulbScale);
+      ctx.lineTo(bulbX + 6 * bulbScale, bulbY + (19 + b * 4) * bulbScale);
+      ctx.stroke();
+    }
+
+    // Radiating Idea Sparks (Shooting rays)
+    const rayCount = 6;
+    for (let r = 0; r < rayCount; r++) {
+      const angle = (r / rayCount) * Math.PI * 1.5 - Math.PI * 0.75;
+      const rayLen = (8 + Math.sin(t * 8 + r) * 4) * scale;
+      const rx1 = bulbX + Math.cos(angle) * (22 * scale);
+      const ry1 = bulbY + Math.sin(angle) * (22 * scale);
+      const rx2 = bulbX + Math.cos(angle) * (22 * scale + rayLen);
+      const ry2 = bulbY + Math.sin(angle) * (22 * scale + rayLen);
+
+      ctx.strokeStyle = r % 2 === 0 ? "#f59e0b" : "#38bdf8";
+      ctx.lineWidth = 2.5 * scale;
+      ctx.beginPath();
+      ctx.moveTo(rx1, ry1);
+      ctx.lineTo(rx2, ry2);
+      ctx.stroke();
+    }
+
+    // 3. Rotating Hand-Drawn Sketch Gears (Top Right)
+    this.drawHandDrawnGear(ctx, w * 0.82, h * 0.15, 20 * scale, t * 1.2, "#0284c7", scale);
+    this.drawHandDrawnGear(ctx, w * 0.82 + 28 * scale, h * 0.15 + 24 * scale, 15 * scale, -t * 1.6, "#f43f5e", scale);
+
+    // 4. Floating Doodle Stars & Scribble Sparkles
+    this.doodleStars.forEach((star, idx) => {
+      star.y -= star.speed;
+      if (star.y < 0) { star.y = 1.05; star.x = Math.random(); }
+      star.rot += star.rotationSpeed;
+
+      const sx = star.x * w;
+      const sy = star.y * h;
+
+      ctx.save();
+      ctx.translate(sx, sy);
+      ctx.rotate(star.rot);
+      ctx.strokeStyle = star.color;
+      ctx.lineWidth = 2.0 * scale;
+      ctx.globalAlpha = star.alpha;
+
+      // 4-point star doodle
+      const sSize = star.size * scale;
+      ctx.beginPath();
+      ctx.moveTo(0, -sSize);
+      ctx.quadraticCurveTo(0, 0, sSize, 0);
+      ctx.quadraticCurveTo(0, 0, 0, sSize);
+      ctx.quadraticCurveTo(0, 0, -sSize, 0);
+      ctx.quadraticCurveTo(0, 0, 0, -sSize);
+      ctx.stroke();
+      ctx.restore();
+    });
+
+    // 5. Curving Hand-Drawn Arrow (Pointing to central topic/glow phrase)
+    const arrowStartX = w * 0.12;
+    const arrowStartY = h * 0.44;
+    const arrowEndX = w * 0.28;
+    const arrowEndY = h * 0.52;
+
+    ctx.strokeStyle = "#8b5cf6";
+    ctx.lineWidth = 3.0 * scale;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(arrowStartX, arrowStartY);
+    ctx.quadraticCurveTo(arrowStartX + 20 * scale, arrowStartY + 45 * scale, arrowEndX, arrowEndY);
+    ctx.stroke();
+
+    // Arrowhead
+    const aAngle = Math.atan2(arrowEndY - (arrowStartY + 35 * scale), arrowEndX - (arrowStartX + 10 * scale));
+    ctx.beginPath();
+    ctx.moveTo(arrowEndX, arrowEndY);
+    ctx.lineTo(arrowEndX - 10 * scale * Math.cos(aAngle - 0.5), arrowEndY - 10 * scale * Math.sin(aAngle - 0.5));
+    ctx.moveTo(arrowEndX, arrowEndY);
+    ctx.lineTo(arrowEndX - 10 * scale * Math.cos(aAngle + 0.5), arrowEndY - 10 * scale * Math.sin(aAngle + 0.5));
+    ctx.stroke();
+
+    // 6. Character / Boy Thinker Doodle (Bottom Right)
+    if (this.characterVisible) {
+      this.drawBoyThinkerDoodle(ctx, w * 0.82, h * 0.82, scale, t);
+    }
+
+    // 7. Highlighter Marker Underline Sweep & Hand-drawn Bracket Box
+    const boxX = w * 0.08;
+    const boxY = h * 0.38;
+    const boxW = w * 0.84;
+    const boxH = h * 0.24;
+
+    // Semi-transparent yellow marker highlight swath
+    ctx.fillStyle = "rgba(254, 240, 138, 0.45)";
+    ctx.beginPath();
+    ctx.roundRect(boxX, boxY + boxH * 0.72, boxW * 0.65, 14 * scale, 4 * scale);
+    ctx.fill();
+
+    // Subtle Hand-Drawn Corner Brackets
+    ctx.strokeStyle = "rgba(15, 23, 42, 0.4)";
+    ctx.lineWidth = 2.4 * scale;
+    const bLen = 14 * scale;
+    // Top-left
+    ctx.beginPath();
+    ctx.moveTo(boxX, boxY + bLen);
+    ctx.lineTo(boxX, boxY);
+    ctx.lineTo(boxX + bLen, boxY);
+    ctx.stroke();
+    // Top-right
+    ctx.beginPath();
+    ctx.moveTo(boxX + boxW - bLen, boxY);
+    ctx.lineTo(boxX + boxW, boxY);
+    ctx.lineTo(boxX + boxW, boxY + bLen);
+    ctx.stroke();
+    // Bottom-right
+    ctx.beginPath();
+    ctx.moveTo(boxX + boxW, boxY + boxH - bLen);
+    ctx.lineTo(boxX + boxW, boxY + boxH);
+    ctx.lineTo(boxX + boxW - bLen, boxY + boxH);
+    ctx.stroke();
+    // Bottom-left
+    ctx.beginPath();
+    ctx.moveTo(boxX + bLen, boxY + boxH);
+    ctx.lineTo(boxX, boxY + boxH);
+    ctx.lineTo(boxX, boxY + boxH - bLen);
+    ctx.stroke();
+  }
+
+  // Draw cute hand-drawn gear with organic wobble
+  drawHandDrawnGear(ctx, cx, cy, radius, rot, color, scale) {
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(rot);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2.6 * scale;
+    ctx.lineCap = "round";
+
+    const teeth = 8;
+    ctx.beginPath();
+    for (let i = 0; i < teeth; i++) {
+      const a1 = (i / teeth) * Math.PI * 2;
+      const a2 = ((i + 0.4) / teeth) * Math.PI * 2;
+      const a3 = ((i + 0.6) / teeth) * Math.PI * 2;
+      const a4 = ((i + 1) / teeth) * Math.PI * 2;
+
+      const rInner = radius * 0.78;
+      const rOuter = radius * 1.15;
+
+      ctx.lineTo(Math.cos(a1) * rInner, Math.sin(a1) * rInner);
+      ctx.lineTo(Math.cos(a2) * rOuter, Math.sin(a2) * rOuter);
+      ctx.lineTo(Math.cos(a3) * rOuter, Math.sin(a3) * rOuter);
+      ctx.lineTo(Math.cos(a4) * rInner, Math.sin(a4) * rInner);
+    }
+    ctx.closePath();
+    ctx.stroke();
+
+    // Center axle hole
+    ctx.beginPath();
+    ctx.arc(0, 0, radius * 0.28, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // Draw cute hand-drawn boy thinker doodle
+  drawBoyThinkerDoodle(ctx, cx, cy, scale, t) {
+    const headRadius = 18 * scale;
+    const breathe = Math.sin(t * 3) * (1.5 * scale);
+    const eyeBlink = Math.sin(t * 1.5) > 0.94 ? 0.2 : 1.0;
+
+    ctx.save();
+    ctx.strokeStyle = "#0f172a";
+    ctx.lineWidth = 3.0 * scale;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+
+    // 1. Head circle with organic sketch line
+    ctx.beginPath();
+    ctx.arc(cx, cy - 35 * scale + breathe, headRadius, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // 2. Messy Cool Hair doodle
+    ctx.fillStyle = "#1e293b";
+    ctx.beginPath();
+    ctx.moveTo(cx - 18 * scale, cy - 40 * scale + breathe);
+    ctx.quadraticCurveTo(cx - 10 * scale, cy - 62 * scale + breathe, cx, cy - 54 * scale + breathe);
+    ctx.quadraticCurveTo(cx + 10 * scale, cy - 64 * scale + breathe, cx + 18 * scale, cy - 40 * scale + breathe);
+    ctx.quadraticCurveTo(cx + 6 * scale, cy - 46 * scale + breathe, cx, cy - 46 * scale + breathe);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // 3. Expressive Glasses & Eyes
+    // Left Glass
+    ctx.beginPath();
+    ctx.arc(cx - 6 * scale, cy - 34 * scale + breathe, 5.5 * scale, 0, Math.PI * 2);
+    ctx.stroke();
+    // Right Glass
+    ctx.beginPath();
+    ctx.arc(cx + 6 * scale, cy - 34 * scale + breathe, 5.5 * scale, 0, Math.PI * 2);
+    ctx.stroke();
+    // Bridge
+    ctx.beginPath();
+    ctx.moveTo(cx - 1 * scale, cy - 34 * scale + breathe);
+    ctx.lineTo(cx + 1 * scale, cy - 34 * scale + breathe);
+    ctx.stroke();
+
+    // Pupils (Blinking)
+    if (eyeBlink > 0.5) {
+      ctx.fillStyle = "#0f172a";
+      ctx.beginPath();
+      ctx.arc(cx - 6 * scale, cy - 34 * scale + breathe, 2.0 * scale, 0, Math.PI * 2);
+      ctx.arc(cx + 6 * scale, cy - 34 * scale + breathe, 2.0 * scale, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Smiling / Thoughtful Mouth
+    ctx.beginPath();
+    ctx.arc(cx, cy - 26 * scale + breathe, 4 * scale, 0.1 * Math.PI, 0.9 * Math.PI);
+    ctx.stroke();
+
+    // 4. Body / Hoodie Doodle
+    ctx.fillStyle = "#38bdf8";
+    ctx.beginPath();
+    ctx.moveTo(cx - 12 * scale, cy - 17 * scale + breathe);
+    ctx.lineTo(cx - 24 * scale, cy + 30 * scale);
+    ctx.lineTo(cx + 24 * scale, cy + 30 * scale);
+    ctx.lineTo(cx + 12 * scale, cy - 17 * scale + breathe);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // 5. Hand holding a sketch pencil
+    const handX = cx - 18 * scale;
+    const handY = cy - 4 * scale + breathe;
+    ctx.strokeStyle = "#0f172a";
+    ctx.beginPath();
+    ctx.arc(handX, handY, 4.5 * scale, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Pencil
+    ctx.save();
+    ctx.translate(handX, handY);
+    ctx.rotate(-0.6 + Math.sin(t * 4) * 0.15);
+    ctx.fillStyle = "#f59e0b";
+    ctx.fillRect(0, -3 * scale, 22 * scale, 6 * scale);
+    ctx.strokeRect(0, -3 * scale, 22 * scale, 6 * scale);
+    // Tip
+    ctx.fillStyle = "#fcd34d";
+    ctx.beginPath();
+    ctx.moveTo(22 * scale, -3 * scale);
+    ctx.lineTo(28 * scale, 0);
+    ctx.lineTo(22 * scale, 3 * scale);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    // Lead
+    ctx.fillStyle = "#0f172a";
+    ctx.beginPath();
+    ctx.moveTo(26 * scale, -1.2 * scale);
+    ctx.lineTo(28 * scale, 0);
+    ctx.lineTo(26 * scale, 1.2 * scale);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+
+    ctx.restore();
+  }
+
+  // -------------------------------------------------------------
+  // 2. CLEAN MINIMAL WHITE STUDIO SCENE
+  // -------------------------------------------------------------
+  drawMinimalWhiteStudioScene(ctx, w, h, t) {
+    const scale = w / 400;
+
+    // Gallery clean off-white background
+    ctx.fillStyle = "#f8fafc";
+    ctx.fillRect(0, 0, w, h);
+
+    // Architectural subtle coordinate grid lines
+    ctx.strokeStyle = "rgba(15, 23, 42, 0.06)";
+    ctx.lineWidth = 1.0 * scale;
+
+    const gridGap = 40 * scale;
+    for (let x = 0; x < w; x += gridGap) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, h);
+      ctx.stroke();
+    }
+    for (let y = 0; y < h; y += gridGap) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(w, y);
+      ctx.stroke();
+    }
+
+    // Rotating Minimal Geometric Wireframe Ring (Center)
+    ctx.save();
+    ctx.translate(w * 0.5, h * 0.45);
+    ctx.rotate(t * 0.4);
+
+    ctx.strokeStyle = "rgba(99, 102, 241, 0.35)";
+    ctx.lineWidth = 1.6 * scale;
+    ctx.beginPath();
+    ctx.arc(0, 0, 70 * scale, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Minimal Axis Crosshairs
+    ctx.strokeStyle = "rgba(15, 23, 42, 0.3)";
+    ctx.lineWidth = 1.2 * scale;
+    ctx.beginPath();
+    ctx.moveTo(-85 * scale, 0);
+    ctx.lineTo(85 * scale, 0);
+    ctx.moveTo(0, -85 * scale);
+    ctx.lineTo(0, 85 * scale);
+    ctx.stroke();
+
+    // Floating orbital nodes
+    const nodeAngle = t * 1.5;
+    ctx.fillStyle = "#6366f1";
+    ctx.beginPath();
+    ctx.arc(Math.cos(nodeAngle) * 70 * scale, Math.sin(nodeAngle) * 70 * scale, 4 * scale, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // Top Right Minimal Studio Stamp
+    ctx.fillStyle = "#0f172a";
+    ctx.font = `bold ${10 * scale}px 'Plus Jakarta Sans', sans-serif`;
+    ctx.fillText("STUDIO // MINIMAL v3.0", w * 0.62, h * 0.08);
+
+    ctx.strokeStyle = "#0f172a";
+    ctx.lineWidth = 2 * scale;
+    ctx.beginPath();
+    ctx.moveTo(w * 0.62, h * 0.09);
+    ctx.lineTo(w * 0.92, h * 0.09);
+    ctx.stroke();
+  }
+
+  // -------------------------------------------------------------
+  // 3. PAPERCRAFT NOTEBOOK SCENE
+  // -------------------------------------------------------------
+  drawPapercraftNotebookScene(ctx, w, h, t) {
+    const scale = w / 400;
+
+    // Warm cream notebook page
+    ctx.fillStyle = "#faf8f5";
+    ctx.fillRect(0, 0, w, h);
+
+    // Blue ruled notebook horizontal lines
+    ctx.strokeStyle = "rgba(59, 130, 246, 0.18)";
+    ctx.lineWidth = 1.2 * scale;
+    const lineSpacing = 28 * scale;
+    for (let y = lineSpacing * 2; y < h; y += lineSpacing) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(w, y);
+      ctx.stroke();
+    }
+
+    // Red margin vertical line
+    ctx.strokeStyle = "rgba(239, 68, 68, 0.4)";
+    ctx.lineWidth = 2.0 * scale;
+    ctx.beginPath();
+    ctx.moveTo(w * 0.12, 0);
+    ctx.lineTo(w * 0.12, h);
+    ctx.stroke();
+
+    // Sticky Note Callout Box (Top Right)
+    const noteX = w * 0.64;
+    const noteY = h * 0.10;
+    const noteW = w * 0.28;
+    const noteH = h * 0.14;
+
+    ctx.save();
+    ctx.translate(noteX + noteW / 2, noteY + noteH / 2);
+    ctx.rotate(0.04);
+    ctx.fillStyle = "#fef08a"; // Yellow sticky note
+    ctx.fillRect(-noteW / 2, -noteH / 2, noteW, noteH);
+
+    // Tape strip on top
+    ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
+    ctx.fillRect(-noteW * 0.3, -noteH / 2 - 4 * scale, noteW * 0.6, 8 * scale);
+
+    ctx.fillStyle = "#854d0e";
+    ctx.font = `bold ${10 * scale}px 'Caveat', cursive, sans-serif`;
+    ctx.fillText("✨ Key Insight!", -noteW / 2 + 10 * scale, -noteH / 2 + 20 * scale);
+    ctx.restore();
+  }
+
+  // -------------------------------------------------------------
+  // 4. RAIN & WINDOW WITH CHARACTER SILHOUETTE
   // -------------------------------------------------------------
   drawRainWindowScene(ctx, w, h, t) {
     const scale = w / 400;
@@ -235,7 +725,6 @@ class SceneAnimationEngine {
       const bh = h * (0.35 + Math.sin(i * 1.5) * 0.15);
       ctx.fillRect(bx, h - bh, bw, bh);
 
-      // Blinking antenna towers
       if (i % 2 === 0) {
         ctx.strokeStyle = "rgba(244, 63, 94, 0.8)";
         ctx.lineWidth = 1.5 * scale;
@@ -244,7 +733,6 @@ class SceneAnimationEngine {
         ctx.lineTo(bx + bw * 0.5, h - bh - 20 * scale);
         ctx.stroke();
 
-        // Beacon light
         const blink = Math.sin(t * 4 + i) > 0 ? 0.9 : 0.2;
         ctx.fillStyle = `rgba(244, 63, 94, ${blink})`;
         ctx.beginPath();
@@ -253,315 +741,158 @@ class SceneAnimationEngine {
       }
     }
 
-    // Glowing Neon Bokeh Orbs in Background (blurred city streetlights)
-    const bokehColors = ["rgba(244,63,94,0.3)", "rgba(56,189,248,0.35)", "rgba(251,191,36,0.3)", "rgba(168,85,247,0.35)"];
-    for (let b = 0; b < 12; b++) {
-      const bx = ((b * 73 + t * 4) % w);
-      const by = h * 0.45 + (Math.sin(b * 2) * h * 0.2);
-      const br = (15 + Math.sin(b + t) * 8) * scale;
-      const bGrad = ctx.createRadialGradient(bx, by, 0, bx, by, br);
-      bGrad.addColorStop(0, bokehColors[b % bokehColors.length]);
-      bGrad.addColorStop(1, "rgba(0,0,0,0)");
-      ctx.fillStyle = bGrad;
+    // Blurred Bokeh lights
+    const bokehColors = ["rgba(56, 189, 248, 0.25)", "rgba(244, 63, 94, 0.25)", "rgba(168, 85, 247, 0.25)", "rgba(251, 191, 36, 0.25)"];
+    for (let i = 0; i < 12; i++) {
+      const bx = (Math.sin(i * 99 + t * 0.1) * 0.5 + 0.5) * w;
+      const by = (Math.cos(i * 33 + t * 0.08) * 0.3 + 0.55) * h;
+      const rad = (15 + Math.sin(t * 2 + i) * 5) * scale;
+      ctx.fillStyle = bokehColors[i % bokehColors.length];
       ctx.beginPath();
-      ctx.arc(bx, by, br, 0, Math.PI * 2);
+      ctx.arc(bx, by, rad, 0, Math.PI * 2);
       ctx.fill();
     }
 
-    // 2. Falling Rain Streaks (Outside window)
-    ctx.strokeStyle = "rgba(186, 230, 253, 0.45)";
-    ctx.lineWidth = 1.2 * scale;
-    ctx.beginPath();
-    this.raindrops.forEach(drop => {
+    // 2. Falling Rain Streaks & Glass Trickle Droplets
+    this.raindrops.forEach((drop) => {
       drop.y += drop.speed;
-      if (drop.y > 1.0) {
-        drop.y = -0.05;
+      if (drop.y > 1.1) {
+        drop.y = -0.1;
         drop.x = Math.random();
       }
-      const x1 = drop.x * w;
-      const y1 = drop.y * h;
-      const x2 = x1 - 4 * scale;
-      const y2 = y1 + drop.len * h;
-      ctx.moveTo(x1, y1);
-      ctx.lineTo(x2, y2);
-    });
-    ctx.stroke();
 
-    // 3. Water droplets running down glass pane
-    this.raindrops.forEach(drop => {
+      const rx = drop.x * w;
+      const ry = drop.y * h;
+
       if (drop.isGlassTrickle) {
-        drop.y += drop.trickleSpeed;
-        if (drop.y > 1.0) drop.y = -0.02;
-        const gx = drop.x * w;
-        const gy = drop.y * h;
-
-        // Droplet body with highlight
-        ctx.fillStyle = "rgba(255, 255, 255, 0.55)";
+        ctx.fillStyle = `rgba(186, 230, 253, ${drop.alpha})`;
         ctx.beginPath();
-        ctx.arc(gx, gy, drop.size * scale, 0, Math.PI * 2);
+        ctx.arc(rx, ry, drop.size * scale, 0, Math.PI * 2);
         ctx.fill();
-
-        // Droplet water streak tail
-        ctx.strokeStyle = "rgba(255, 255, 255, 0.15)";
-        ctx.lineWidth = 1 * scale;
+      } else {
+        ctx.strokeStyle = `rgba(224, 242, 254, ${drop.alpha})`;
+        ctx.lineWidth = drop.thickness * scale;
         ctx.beginPath();
-        ctx.moveTo(gx, gy - 8 * scale);
-        ctx.lineTo(gx, gy);
+        ctx.moveTo(rx, ry);
+        ctx.lineTo(rx - 8 * scale, ry + drop.len * h);
         ctx.stroke();
       }
     });
 
-    // 4. Window Frame / Glass Sill
-    ctx.fillStyle = "rgba(15, 23, 42, 0.85)";
-    const sillHeight = h * 0.12;
-    ctx.fillRect(0, h - sillHeight, w, sillHeight);
+    // 3. Window Pane Frame Lines
+    ctx.strokeStyle = "rgba(15, 23, 42, 0.75)";
+    ctx.lineWidth = 8 * scale;
+    ctx.beginPath();
+    ctx.moveTo(w * 0.5, 0);
+    ctx.lineTo(w * 0.5, h);
+    ctx.moveTo(0, h * 0.48);
+    ctx.lineTo(w, h * 0.48);
+    ctx.stroke();
 
-    // Window sill top edge highlight
-    ctx.fillStyle = "rgba(56, 189, 248, 0.35)";
-    ctx.fillRect(0, h - sillHeight, w, 2 * scale);
-
-    // Vertical Window Mullion Frame
-    ctx.fillStyle = "rgba(15, 23, 42, 0.9)";
-    ctx.fillRect(w * 0.72, 0, 14 * scale, h - sillHeight);
-    ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
-    ctx.fillRect(w * 0.72, 0, 2 * scale, h - sillHeight);
-
-    // 5. Boy / Character Silhouette Standing Near Window Looking Out
+    // 4. Character Silhouette (Looking Out The Window)
     if (this.characterVisible) {
-      const charX = w * 0.38;
-      const charY = h - sillHeight;
-      const breathe = Math.sin(t * 2) * (2 * scale);
+      const charX = w * 0.72;
+      const charY = h * 0.88;
+      const breathe = Math.sin(t * 2.5) * (2 * scale);
 
-      ctx.save();
-      ctx.fillStyle = "#020617"; // Rich deep silhouette
+      ctx.fillStyle = "#050814";
 
-      // Body / Jacket / Torso
+      // Head
       ctx.beginPath();
-      ctx.moveTo(charX - 35 * scale, charY);
-      ctx.lineTo(charX - 28 * scale, charY - 110 * scale + breathe);
-      // Left shoulder
-      ctx.quadraticCurveTo(charX - 25 * scale, charY - 135 * scale + breathe, charX - 10 * scale, charY - 140 * scale + breathe);
-      // Neck base
-      ctx.lineTo(charX + 5 * scale, charY - 140 * scale + breathe);
-      // Right shoulder
-      ctx.quadraticCurveTo(charX + 25 * scale, charY - 135 * scale + breathe, charX + 32 * scale, charY - 110 * scale + breathe);
-      // Right side torso
-      ctx.lineTo(charX + 38 * scale, charY);
-      ctx.closePath();
+      ctx.arc(charX, charY - 80 * scale + breathe, 22 * scale, 0, Math.PI * 2);
       ctx.fill();
 
-      // Head & Hair / Hoodie Silhouette (Profile looking slightly right towards the window)
-      const headCenterY = charY - 165 * scale + breathe;
+      // Hair silhouette looking leftwards at window
       ctx.beginPath();
-      ctx.arc(charX - 2 * scale, headCenterY, 18 * scale, 0, Math.PI * 2);
+      ctx.arc(charX - 4 * scale, charY - 86 * scale + breathe, 23 * scale, Math.PI * 0.8, Math.PI * 1.9);
       ctx.fill();
 
-      // Hoodie / Hair fluff silhouette details
+      // Shoulders & Body
       ctx.beginPath();
-      ctx.arc(charX - 8 * scale, headCenterY - 4 * scale, 14 * scale, 0, Math.PI * 2);
-      ctx.arc(charX + 6 * scale, headCenterY - 6 * scale, 12 * scale, 0, Math.PI * 2);
+      ctx.ellipse(charX, charY + breathe, 45 * scale, 75 * scale, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // Hand resting near window glass / sill
+      // Arm resting on window sill
       ctx.beginPath();
-      ctx.arc(charX + 32 * scale, charY - 45 * scale + breathe * 0.5, 8 * scale, 0, Math.PI * 2);
+      ctx.roundRect(charX - 55 * scale, charY - 20 * scale + breathe, 65 * scale, 16 * scale, 8 * scale);
       ctx.fill();
-
-      // Soft Rim Light on Character's Silhouette from rainy window backlight
-      ctx.strokeStyle = "rgba(56, 189, 248, 0.4)";
-      ctx.lineWidth = 2 * scale;
-      ctx.beginPath();
-      // Highlight right shoulder & side towards window
-      ctx.moveTo(charX + 6 * scale, headCenterY - 18 * scale);
-      ctx.quadraticCurveTo(charX + 16 * scale, headCenterY, charX + 14 * scale, headCenterY + 16 * scale);
-      ctx.quadraticCurveTo(charX + 28 * scale, charY - 130 * scale + breathe, charX + 34 * scale, charY - 90 * scale);
-      ctx.stroke();
-
-      // Window Glass Reflection of the character
-      ctx.save();
-      ctx.globalAlpha = 0.12;
-      ctx.fillStyle = "#38bdf8";
-      ctx.beginPath();
-      ctx.ellipse(charX + 45 * scale, headCenterY + 5 * scale, 16 * scale, 18 * scale, 0.1, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
-
-      ctx.restore();
     }
-
-    // Atmospheric Vignette & Glow Overlay
-    const vigGrad = ctx.createRadialGradient(w * 0.5, h * 0.5, w * 0.2, w * 0.5, h * 0.5, w * 0.9);
-    vigGrad.addColorStop(0, "rgba(0,0,0,0)");
-    vigGrad.addColorStop(1, "rgba(2, 6, 23, 0.75)");
-    ctx.fillStyle = vigGrad;
-    ctx.fillRect(0, 0, w, h);
   }
 
   // -------------------------------------------------------------
-  // 2. CYBERPUNK CAR WITH NEON HEADLIGHTS & CHARACTER
+  // 5. CYBERPUNK CAR & NEON CITY
   // -------------------------------------------------------------
   drawCyberCarScene(ctx, w, h, t) {
     const scale = w / 400;
 
-    // Dark Cyberpunk City Skyline
+    // Dark cyberpunk gradient sky
     const sky = ctx.createLinearGradient(0, 0, 0, h);
-    sky.addColorStop(0, "#050510");
-    sky.addColorStop(0.6, "#150d2a");
-    sky.addColorStop(1, "#030712");
+    sky.addColorStop(0, "#090514");
+    sky.addColorStop(0.6, "#18092a");
+    sky.addColorStop(1, "#030206");
     ctx.fillStyle = sky;
     ctx.fillRect(0, 0, w, h);
 
-    // Neon Grid Perspective Ground / Wet Asphalt
-    const groundY = h * 0.65;
-    const groundGrad = ctx.createLinearGradient(0, groundY, 0, h);
-    groundGrad.addColorStop(0, "#090d1f");
-    groundGrad.addColorStop(1, "#02040a");
-    ctx.fillStyle = groundGrad;
-    ctx.fillRect(0, groundY, w, h - groundY);
+    // Wet asphalt ground reflection
+    const roadY = h * 0.65;
+    ctx.fillStyle = "#0a0712";
+    ctx.fillRect(0, 0, w, h);
 
-    // Distant Neon City Buildings
-    ctx.fillStyle = "rgba(15, 23, 42, 0.95)";
-    for (let i = 0; i < 7; i++) {
-      const bx = (i / 7) * w;
-      const bw = w / 7;
-      const bh = h * (0.28 + Math.cos(i) * 0.12);
-      ctx.fillRect(bx, groundY - bh, bw, bh);
+    // Neon underglow
+    const carX = w * 0.5;
+    const carY = h * 0.72;
+    const glow = ctx.createRadialGradient(carX, carY + 30 * scale, 0, carX, carY + 30 * scale, 120 * scale);
+    glow.addColorStop(0, "rgba(236, 72, 153, 0.75)");
+    glow.addColorStop(1, "rgba(236, 72, 153, 0)");
+    ctx.fillStyle = glow;
+    ctx.fillRect(0, roadY, w, h - roadY);
 
-      // Neon sign on building
-      if (i === 2 || i === 5) {
-        ctx.fillStyle = i === 2 ? "rgba(244, 63, 94, 0.7)" : "rgba(56, 189, 248, 0.7)";
-        ctx.fillRect(bx + 10 * scale, groundY - bh + 20 * scale, 25 * scale, 8 * scale);
-      }
-    }
+    // Sports car body silhouette
+    ctx.fillStyle = "#0d1117";
+    ctx.beginPath();
+    ctx.moveTo(carX - 110 * scale, carY + 25 * scale);
+    ctx.lineTo(carX - 95 * scale, carY - 5 * scale);
+    ctx.lineTo(carX - 45 * scale, carY - 20 * scale);
+    ctx.lineTo(carX + 50 * scale, carY - 20 * scale);
+    ctx.lineTo(carX + 105 * scale, carY + 10 * scale);
+    ctx.lineTo(carX + 115 * scale, carY + 25 * scale);
+    ctx.closePath();
+    ctx.fill();
 
-    // Car Position & Dimensions
-    const carX = w * 0.48;
-    const carY = groundY + 15 * scale;
-    const carW = 240 * scale;
-    const carH = 70 * scale;
+    // Twin Cyan Headlights Beam
+    ctx.strokeStyle = "#38bdf8";
+    ctx.lineWidth = 3 * scale;
+    ctx.beginPath();
+    ctx.moveTo(carX - 85 * scale, carY + 5 * scale);
+    ctx.lineTo(carX - 45 * scale, carY + 5 * scale);
+    ctx.stroke();
 
-    // Headlight Beams illuminating wet ground
-    ctx.save();
-    const beamGrad = ctx.createRadialGradient(carX + carW * 0.45, carY + carH * 0.4, 10 * scale, carX + carW * 0.9, carY + carH * 0.6, 180 * scale);
+    // Beam cone
+    const beamGrad = ctx.createRadialGradient(carX - 65 * scale, carY + 5 * scale, 0, carX - 140 * scale, carY + 50 * scale, 140 * scale);
     beamGrad.addColorStop(0, "rgba(56, 189, 248, 0.6)");
-    beamGrad.addColorStop(0.4, "rgba(56, 189, 248, 0.2)");
-    beamGrad.addColorStop(1, "rgba(0,0,0,0)");
+    beamGrad.addColorStop(1, "rgba(56, 189, 248, 0)");
     ctx.fillStyle = beamGrad;
     ctx.beginPath();
-    ctx.moveTo(carX + carW * 0.45, carY + carH * 0.35);
-    ctx.lineTo(w * 1.1, groundY - 10 * scale);
-    ctx.lineTo(w * 1.1, h);
-    ctx.lineTo(carX + carW * 0.45, carY + carH * 0.55);
+    ctx.moveTo(carX - 85 * scale, carY + 5 * scale);
+    ctx.lineTo(carX - 220 * scale, carY + 80 * scale);
+    ctx.lineTo(carX - 45 * scale, carY + 80 * scale);
     ctx.closePath();
     ctx.fill();
-    ctx.restore();
-
-    // Car Underglow (Neon Pink / Cyan Pulse)
-    const underglow = ctx.createRadialGradient(carX, carY + carH * 0.8, 10, carX, carY + carH * 0.8, carW * 0.6);
-    underglow.addColorStop(0, "rgba(244, 63, 94, 0.85)");
-    underglow.addColorStop(0.6, "rgba(168, 85, 247, 0.4)");
-    underglow.addColorStop(1, "rgba(0,0,0,0)");
-    ctx.fillStyle = underglow;
-    ctx.fillRect(carX - carW * 0.6, carY + carH * 0.6, carW * 1.2, 40 * scale);
-
-    // Car Body Silhouette (Futuristic Cyber Sports Coupe)
-    ctx.fillStyle = "#090914";
-    ctx.beginPath();
-    ctx.moveTo(carX - carW * 0.48, carY + carH * 0.6);
-    // Rear bumper & spoiler
-    ctx.lineTo(carX - carW * 0.48, carY + carH * 0.2);
-    ctx.lineTo(carX - carW * 0.42, carY + carH * 0.05); // Spoiler
-    ctx.lineTo(carX - carW * 0.35, carY + carH * 0.22);
-    // Roofline & Windshield
-    ctx.lineTo(carX - carW * 0.15, carY - carH * 0.25);
-    ctx.lineTo(carX + carW * 0.18, carY - carH * 0.25);
-    ctx.lineTo(carX + carW * 0.38, carY + carH * 0.15); // Hood
-    ctx.lineTo(carX + carW * 0.48, carY + carH * 0.35); // Front bumper
-    ctx.lineTo(carX + carW * 0.46, carY + carH * 0.65);
-    ctx.closePath();
-    ctx.fill();
-
-    // Cyber Rim Wheels
-    const wheelY = carY + carH * 0.65;
-    const wheelRadius = 18 * scale;
-    [carX - carW * 0.3, carX + carW * 0.3].forEach((wx) => {
-      ctx.fillStyle = "#020205";
-      ctx.beginPath();
-      ctx.arc(wx, wheelY, wheelRadius, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Glowing Cyan Rim Ring
-      ctx.strokeStyle = "#38bdf8";
-      ctx.lineWidth = 2 * scale;
-      ctx.beginPath();
-      ctx.arc(wx, wheelY, wheelRadius * 0.7, 0, Math.PI * 2);
-      ctx.stroke();
-    });
-
-    // Glowing Neon Headlights & Taillights
-    ctx.fillStyle = "#38bdf8";
-    ctx.shadowColor = "#38bdf8";
-    ctx.shadowBlur = 15;
-    ctx.fillRect(carX + carW * 0.44, carY + carH * 0.28, 8 * scale, 6 * scale);
-
-    ctx.fillStyle = "#f43f5e";
-    ctx.shadowColor = "#f43f5e";
-    ctx.shadowBlur = 15;
-    ctx.fillRect(carX - carW * 0.48, carY + carH * 0.22, 6 * scale, 5 * scale);
-    ctx.shadowBlur = 0;
-
-    // Character Stance standing next to car
-    if (this.characterVisible) {
-      const cx = carX - carW * 0.12;
-      const cy = groundY + 30 * scale;
-      const breathe = Math.sin(t * 2) * (1.5 * scale);
-
-      ctx.fillStyle = "#020617";
-      // Body
-      ctx.beginPath();
-      ctx.moveTo(cx - 18 * scale, cy);
-      ctx.lineTo(cx - 14 * scale, cy - 85 * scale + breathe);
-      ctx.quadraticCurveTo(cx, cy - 105 * scale + breathe, cx + 14 * scale, cy - 85 * scale + breathe);
-      ctx.lineTo(cx + 18 * scale, cy);
-      ctx.closePath();
-      ctx.fill();
-
-      // Head with glowing cyber visor
-      const hy = cy - 120 * scale + breathe;
-      ctx.beginPath();
-      ctx.arc(cx, hy, 14 * scale, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Visor Glow Line
-      ctx.strokeStyle = "#22d3ee";
-      ctx.lineWidth = 2 * scale;
-      ctx.shadowColor = "#22d3ee";
-      ctx.shadowBlur = 10;
-      ctx.beginPath();
-      ctx.moveTo(cx + 2 * scale, hy - 2 * scale);
-      ctx.lineTo(cx + 12 * scale, hy - 1 * scale);
-      ctx.stroke();
-      ctx.shadowBlur = 0;
-    }
   }
 
   // -------------------------------------------------------------
-  // 3. ASTRONAUT & DEEP SPACE PLANETARY SCENE
+  // 6. DEEP SPACE ASTRONAUT SCENE
   // -------------------------------------------------------------
   drawAstronautSpaceScene(ctx, w, h, t) {
     const scale = w / 400;
 
-    // Deep Space Gradient
-    const spaceGrad = ctx.createRadialGradient(w * 0.5, h * 0.4, 20, w * 0.5, h * 0.5, w * 0.9);
-    spaceGrad.addColorStop(0, "#1e0b36");
-    spaceGrad.addColorStop(0.5, "#0b051c");
-    spaceGrad.addColorStop(1, "#020008");
-    ctx.fillStyle = spaceGrad;
+    // Space Deep Black
+    ctx.fillStyle = "#030712";
     ctx.fillRect(0, 0, w, h);
 
-    // Stars Twinkle
+    // Stars
     this.stars.forEach((s) => {
-      const alpha = s.alpha * (0.6 + Math.sin(t * 5 + s.x * 100) * 0.4);
+      const alpha = s.alpha * (0.6 + Math.sin(t * 4 + s.twinkleSpeed * 100) * 0.4);
       ctx.fillStyle = s.color;
       ctx.globalAlpha = alpha;
       ctx.beginPath();
@@ -570,253 +901,135 @@ class SceneAnimationEngine {
     });
     ctx.globalAlpha = 1.0;
 
-    // Giant Glowing Planet with Rings in Background
-    const planetX = w * 0.75;
-    const planetY = h * 0.28;
-    const planetR = 75 * scale;
-
-    const pGrad = ctx.createRadialGradient(planetX - 25 * scale, planetY - 25 * scale, 5, planetX, planetY, planetR);
-    pGrad.addColorStop(0, "#ec4899");
-    pGrad.addColorStop(0.5, "#8b5cf6");
-    pGrad.addColorStop(1, "#1e1035");
-    ctx.fillStyle = pGrad;
+    // Glowing Nebula
+    const nebX = w * 0.3;
+    const nebY = h * 0.25;
+    const nebGrad = ctx.createRadialGradient(nebX, nebY, 0, nebX, nebY, 140 * scale);
+    nebGrad.addColorStop(0, "rgba(168, 85, 247, 0.45)");
+    nebGrad.addColorStop(0.6, "rgba(59, 130, 246, 0.2)");
+    nebGrad.addColorStop(1, "rgba(3, 7, 18, 0)");
+    ctx.fillStyle = nebGrad;
     ctx.beginPath();
-    ctx.arc(planetX, planetY, planetR, 0, Math.PI * 2);
+    ctx.arc(nebX, nebY, 140 * scale, 0, Math.PI * 2);
     ctx.fill();
 
-    // Planetary Rings
-    ctx.save();
-    ctx.translate(planetX, planetY);
-    ctx.rotate(-0.4);
-    ctx.strokeStyle = "rgba(244, 114, 182, 0.45)";
-    ctx.lineWidth = 6 * scale;
+    // Floating Astronaut
+    const astroX = w * 0.5 + Math.sin(t * 0.8) * (12 * scale);
+    const astroY = h * 0.68 + Math.cos(t * 0.6) * (14 * scale);
+
+    // Helmet
+    ctx.fillStyle = "#f8fafc";
     ctx.beginPath();
-    ctx.ellipse(0, 0, planetR * 1.8, planetR * 0.4, 0, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.restore();
+    ctx.arc(astroX, astroY - 35 * scale, 22 * scale, 0, Math.PI * 2);
+    ctx.fill();
 
-    // Floating Astronaut with zero-G bobbing
-    if (this.characterVisible) {
-      const ax = w * 0.4 + Math.sin(t * 0.8) * (15 * scale);
-      const ay = h * 0.55 + Math.cos(t * 0.6) * (12 * scale);
-      const rot = Math.sin(t * 0.5) * 0.08;
+    // Visor Golden Glint
+    ctx.fillStyle = "#f59e0b";
+    ctx.beginPath();
+    ctx.ellipse(astroX, astroY - 35 * scale, 14 * scale, 9 * scale, 0, 0, Math.PI * 2);
+    ctx.fill();
 
-      ctx.save();
-      ctx.translate(ax, ay);
-      ctx.rotate(rot);
-
-      // Backpack / Life support
-      ctx.fillStyle = "#334155";
-      ctx.fillRect(-28 * scale, -45 * scale, 56 * scale, 75 * scale);
-
-      // Spacesuit Torso
-      ctx.fillStyle = "#e2e8f0";
-      ctx.beginPath();
-      ctx.roundRect(-22 * scale, -40 * scale, 44 * scale, 65 * scale, 12 * scale);
-      ctx.fill();
-
-      // Helmet
-      ctx.fillStyle = "#f8fafc";
-      ctx.beginPath();
-      ctx.arc(0, -58 * scale, 22 * scale, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Gold Visor with reflection
-      const visorGrad = ctx.createLinearGradient(-15 * scale, -65 * scale, 15 * scale, -50 * scale);
-      visorGrad.addColorStop(0, "#fbbf24");
-      visorGrad.addColorStop(0.5, "#f59e0b");
-      visorGrad.addColorStop(1, "#b45309");
-      ctx.fillStyle = visorGrad;
-      ctx.beginPath();
-      ctx.ellipse(2 * scale, -58 * scale, 14 * scale, 12 * scale, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Visor highlight glint
-      ctx.fillStyle = "rgba(255,255,255,0.7)";
-      ctx.beginPath();
-      ctx.arc(-2 * scale, -62 * scale, 3.5 * scale, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.restore();
-    }
+    // Suit Body
+    ctx.fillStyle = "#e2e8f0";
+    ctx.beginPath();
+    ctx.roundRect(astroX - 25 * scale, astroY - 10 * scale, 50 * scale, 60 * scale, 12 * scale);
+    ctx.fill();
   }
 
   // -------------------------------------------------------------
-  // 4. MATRIX TERMINAL HACKER SCENE
+  // 7. MATRIX TERMINAL SCENE
   // -------------------------------------------------------------
   drawMatrixTerminalScene(ctx, w, h, t) {
     const scale = w / 400;
-
-    // Dark matrix background
-    ctx.fillStyle = "#020804";
+    ctx.fillStyle = "#020b06";
     ctx.fillRect(0, 0, w, h);
 
-    // Cascading green matrix code rain
-    ctx.font = `${12 * scale}px monospace`;
-    ctx.fillStyle = "#22c55e";
-
+    ctx.font = `${11 * scale}px monospace`;
     this.matrixGlyphs.forEach((g) => {
       g.y += g.speed;
-      if (g.y > 1.0) g.y = -0.05;
+      if (g.y > 1.1) g.y = -0.1;
 
       const gx = g.col * w;
       const gy = g.y * h;
 
-      // Draw trail of green glyphs
-      for (let i = 0; i < 8; i++) {
-        const charIdx = (Math.floor(t * 10 + i + g.col * 20)) % g.chars.length;
-        const char = g.chars[charIdx];
-        const alpha = Math.max(0.1, 1.0 - (i * 0.12));
-        ctx.fillStyle = i === 0 ? "#86efac" : `rgba(34, 197, 94, ${alpha})`;
-        ctx.fillText(char, gx, gy - (i * 14 * scale));
+      ctx.fillStyle = "#10b981";
+      ctx.fillText(g.leadChar, gx, gy);
+
+      for (let k = 1; k < 6; k++) {
+        ctx.fillStyle = `rgba(16, 185, 129, ${0.8 - k * 0.14})`;
+        ctx.fillText(g.chars[(k + Math.floor(t * 10)) % g.chars.length], gx, gy - k * 14 * scale);
       }
     });
-
-    // Hacker Silhouette at Desk with Glowing Dual Displays
-    if (this.characterVisible) {
-      const deskY = h * 0.78;
-      ctx.fillStyle = "#030d06";
-      ctx.fillRect(0, deskY, w, h - deskY);
-
-      // Glowing Monitors
-      ctx.fillStyle = "rgba(34, 197, 94, 0.25)";
-      ctx.shadowColor = "#22c55e";
-      ctx.shadowBlur = 20;
-      ctx.fillRect(w * 0.2, deskY - 60 * scale, 70 * scale, 45 * scale);
-      ctx.fillRect(w * 0.55, deskY - 60 * scale, 70 * scale, 45 * scale);
-      ctx.shadowBlur = 0;
-
-      // Hacker Silhouette
-      ctx.fillStyle = "#010502";
-      const hx = w * 0.48;
-      ctx.beginPath();
-      ctx.arc(hx, deskY - 75 * scale, 16 * scale, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Torso
-      ctx.beginPath();
-      ctx.moveTo(hx - 25 * scale, deskY);
-      ctx.lineTo(hx - 20 * scale, deskY - 60 * scale);
-      ctx.quadraticCurveTo(hx, deskY - 70 * scale, hx + 20 * scale, deskY - 60 * scale);
-      ctx.lineTo(hx + 25 * scale, deskY);
-      ctx.closePath();
-      ctx.fill();
-    }
   }
 
   // -------------------------------------------------------------
-  // 5. NATURE SUNSET & MOUNTAIN HORIZON
+  // 8. NATURE SUNSET SCENE
   // -------------------------------------------------------------
   drawNatureSunsetScene(ctx, w, h, t) {
     const scale = w / 400;
-
-    // Warm Sunset Sky
-    const sunSky = ctx.createLinearGradient(0, 0, 0, h);
-    sunSky.addColorStop(0, "#451a03");
-    sunSky.addColorStop(0.4, "#9a3412");
-    sunSky.addColorStop(0.7, "#ea580c");
-    sunSky.addColorStop(1, "#1c1917");
-    ctx.fillStyle = sunSky;
+    const sky = ctx.createLinearGradient(0, 0, 0, h);
+    sky.addColorStop(0, "#f97316");
+    sky.addColorStop(0.4, "#ec4899");
+    sky.addColorStop(0.8, "#3b0764");
+    sky.addColorStop(1, "#090114");
+    ctx.fillStyle = sky;
     ctx.fillRect(0, 0, w, h);
 
     // Glowing Golden Sun
     const sunX = w * 0.5;
-    const sunY = h * 0.52;
-    const sunGrad = ctx.createRadialGradient(sunX, sunY, 10, sunX, sunY, 65 * scale);
-    sunGrad.addColorStop(0, "rgba(254, 240, 138, 0.95)");
-    sunGrad.addColorStop(0.4, "rgba(251, 146, 60, 0.6)");
-    sunGrad.addColorStop(1, "rgba(0,0,0,0)");
-    ctx.fillStyle = sunGrad;
+    const sunY = h * 0.45;
+    ctx.fillStyle = "#fef08a";
     ctx.beginPath();
-    ctx.arc(sunX, sunY, 65 * scale, 0, Math.PI * 2);
+    ctx.arc(sunX, sunY, 38 * scale, 0, Math.PI * 2);
     ctx.fill();
 
-    // Mountain Ridges Silhouette
-    ctx.fillStyle = "#1c1917";
+    // Mountain Ridges
+    ctx.fillStyle = "#1e1035";
     ctx.beginPath();
     ctx.moveTo(0, h * 0.65);
-    ctx.lineTo(w * 0.3, h * 0.52);
-    ctx.lineTo(w * 0.6, h * 0.62);
-    ctx.lineTo(w * 0.85, h * 0.48);
-    ctx.lineTo(w, h * 0.58);
+    ctx.lineTo(w * 0.35, h * 0.52);
+    ctx.lineTo(w * 0.7, h * 0.62);
+    ctx.lineTo(w, h * 0.48);
     ctx.lineTo(w, h);
     ctx.lineTo(0, h);
     ctx.closePath();
     ctx.fill();
-
-    // Character Silhouette on Cliff
-    if (this.characterVisible) {
-      const cx = w * 0.3;
-      const cy = h * 0.52;
-      ctx.fillStyle = "#0c0a09";
-      ctx.beginPath();
-      ctx.arc(cx, cy - 35 * scale, 9 * scale, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.moveTo(cx - 10 * scale, cy);
-      ctx.lineTo(cx - 8 * scale, cy - 25 * scale);
-      ctx.quadraticCurveTo(cx, cy - 30 * scale, cx + 8 * scale, cy - 25 * scale);
-      ctx.lineTo(cx + 10 * scale, cy);
-      ctx.closePath();
-      ctx.fill();
-    }
   }
 
   // -------------------------------------------------------------
-  // 6. QUANTUM CORE REACTOR SCENE
+  // 9. QUANTUM CORE SCENE
   // -------------------------------------------------------------
   drawQuantumCoreScene(ctx, w, h, t) {
     const scale = w / 400;
-
-    const bg = ctx.createRadialGradient(w * 0.5, h * 0.5, 10, w * 0.5, h * 0.5, w * 0.8);
-    bg.addColorStop(0, "#082f49");
-    bg.addColorStop(0.6, "#031024");
-    bg.addColorStop(1, "#020617");
-    ctx.fillStyle = bg;
+    ctx.fillStyle = "#030712";
     ctx.fillRect(0, 0, w, h);
 
-    const qx = w * 0.5;
-    const qy = h * 0.5;
+    const cx = w * 0.5;
+    const cy = h * 0.5;
 
-    // Orbiting Electron Rings
-    for (let r = 0; r < 3; r++) {
-      ctx.save();
-      ctx.translate(qx, qy);
-      ctx.rotate(t * (0.8 + r * 0.3) + r * 1.2);
-      ctx.strokeStyle = r === 0 ? "rgba(56, 189, 248, 0.7)" : r === 1 ? "rgba(244, 63, 94, 0.7)" : "rgba(168, 85, 247, 0.7)";
-      ctx.lineWidth = 2 * scale;
-      ctx.beginPath();
-      ctx.ellipse(0, 0, (75 + r * 18) * scale, (25 + r * 8) * scale, 0, 0, Math.PI * 2);
-      ctx.stroke();
-
-      // Electron particle on orbit
-      const eAngle = t * (2 + r);
-      const ex = Math.cos(eAngle) * (75 + r * 18) * scale;
-      const ey = Math.sin(eAngle) * (25 + r * 8) * scale;
-      ctx.fillStyle = "#ffffff";
-      ctx.beginPath();
-      ctx.arc(ex, ey, 4 * scale, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
-    }
-
-    // Glowing Central Core
-    const coreGrad = ctx.createRadialGradient(qx, qy, 0, qx, qy, 35 * scale);
-    coreGrad.addColorStop(0, "#ffffff");
-    coreGrad.addColorStop(0.4, "#38bdf8");
-    coreGrad.addColorStop(1, "rgba(56,189,248,0)");
+    // Glowing core
+    const coreGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 80 * scale);
+    coreGrad.addColorStop(0, "#38bdf8");
+    coreGrad.addColorStop(0.5, "rgba(99, 102, 241, 0.4)");
+    coreGrad.addColorStop(1, "rgba(3, 7, 18, 0)");
     ctx.fillStyle = coreGrad;
     ctx.beginPath();
-    ctx.arc(qx, qy, 35 * scale, 0, Math.PI * 2);
+    ctx.arc(cx, cy, 80 * scale, 0, Math.PI * 2);
     ctx.fill();
+
+    // Orbital quantum rings
+    for (let r = 0; r < 3; r++) {
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(t * (0.8 + r * 0.4) + (r * Math.PI) / 3);
+      ctx.strokeStyle = r === 0 ? "#38bdf8" : r === 1 ? "#ec4899" : "#a855f7";
+      ctx.lineWidth = 2 * scale;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 75 * scale, 30 * scale, 0, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+    }
   }
 }
 
-// Global initialization
-window.SceneAnimationEngine = SceneAnimationEngine;
-document.addEventListener("DOMContentLoaded", () => {
-  if (!window.sceneAnimationEngine) {
-    window.sceneAnimationEngine = new SceneAnimationEngine();
-  }
-});
+window.sceneAnimationEngine = new SceneAnimationEngine();
