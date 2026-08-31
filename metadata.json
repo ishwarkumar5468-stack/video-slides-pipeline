@@ -1,6 +1,6 @@
 {
   "name": "Video Slides Pipeline",
-  "description": "Script-to-animated-slides pipeline: scene breakdown, visuals, style, animation tags, SFX tags, and render manifest generation.",
+  "description": "Interactive video slides & kinetic typography studio featuring an AI Brain engine that deeply understands any prompt to synthesize multi-scene slides with Pexels stock video backgrounds, HUD infographics, natural voice synthesis, studio SFX cues, and interactive storyboard timeline.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

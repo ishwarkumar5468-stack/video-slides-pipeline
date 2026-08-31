@@ -1,4 +1,5 @@
 import fetch from "node-fetch";
+import { getStockVideoForSlide } from "./stockVideoService.js";
 
 const STYLE_SUFFIX =
   "dark background, neon blue and purple accents, glowing edges, holographic, cinematic lighting, high detail, futuristic";
