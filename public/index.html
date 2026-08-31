@@ -1,0 +1,1812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Slides Studio - Kinetic Typography & Pictorial Motion Graphics</title>
+  <meta name="description" content="Professional Script-to-Video Slides Studio: Advanced text typography editing, pictorial infographics, kinetic animations, and video export.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@700;800&family=Outfit:wght@500;700;800&family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .font-space { font-family: 'Space Grotesk', sans-serif; }
+    .font-syne { font-family: 'Syne', sans-serif; }
+    .font-outfit { font-family: 'Outfit', sans-serif; }
+    .font-playfair { font-family: 'Playfair Display', serif; }
+    .font-inter { font-family: 'Inter', sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+    /* Custom Kinetic Typography Keyframes */
+    @keyframes word-pop {
+      0% { opacity: 0; transform: translateY(18px) scale(0.85); filter: blur(3px); }
+      70% { transform: translateY(-2px) scale(1.03); filter: blur(0px); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes glitch-anim {
+      0% { transform: translate(0) scale(1); filter: drop-shadow(0 0 10px rgba(99,102,241,0.6)); }
+      20% { transform: translate(-3px, 2px) skewX(2deg); filter: drop-shadow(2px -2px 0 #ec4899) drop-shadow(-2px 2px 0 #06b6d4); }
+      40% { transform: translate(3px, -2px) skewX(-2deg); filter: drop-shadow(-2px -2px 0 #3b82f6) drop-shadow(2px 2px 0 #8b5cf6); }
+      60% { transform: translate(-2px, 1px); filter: drop-shadow(0 0 12px rgba(168,85,247,0.8)); }
+      100% { transform: translate(0) scale(1); }
+    }
+    @keyframes scanline-bar {
+      0% { top: -10%; opacity: 0.9; }
+      50% { opacity: 1; }
+      100% { top: 110%; opacity: 0.2; }
+    }
+    @keyframes radar-sweep {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes pulse-ring {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.08); opacity: 0.4; }
+    }
+    @keyframes float-badge {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+    @keyframes typewriter-blink {
+      0%, 100% { border-color: transparent; }
+      50% { border-color: #38bdf8; }
+    }
+
+    .animate-word { animation: word-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+    .animate-glitch { animation: glitch-anim 0.5s ease-in-out both; }
+    .animate-radar { animation: radar-sweep 4s linear infinite; }
+    .animate-ring { animation: pulse-ring 2.5s ease-in-out infinite; }
+    .animate-float { animation: float-badge 3s ease-in-out infinite; }
+
+    .scanline-overlay {
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%),
+                  linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+      background-size: 100% 4px, 6px 100%;
+    }
+    .laser-line {
+      position: absolute; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.9), rgba(168, 85, 247, 0.9), transparent);
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.8);
+      animation: scanline-bar 2.8s linear infinite;
+    }
+
+    /* Aspect ratios */
+    .aspect-9-16 { aspect-ratio: 9 / 16; }
+    .aspect-16-9 { aspect-ratio: 16 / 9; }
+    .aspect-1-1 { aspect-ratio: 1 / 1; }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6); }
+    ::-webkit-scrollbar-thumb { background: rgba(51, 65, 85, 0.8); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(99, 102, 241, 0.8); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen antialiased flex flex-col selection:bg-indigo-500 selection:text-white">
+
+  <!-- Header / Navigation Bar -->
+  <header class="border-b border-slate-800/80 bg-slate-900/90 backdrop-blur-md sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/25">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h1 class="text-base sm:text-lg font-bold text-white tracking-tight font-space">Video Slides Studio</h1>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-indigo-950 text-indigo-300 border border-indigo-800/60">Pro Motion Engine</span>
+          </div>
+          <p class="text-xs text-slate-400 hidden sm:block">Script to kinetic typography, animated pictorial infographics & synchronized soundscapes</p>
+        </div>
+      </div>
+
+      <!-- Quick Actions / Audio & TTS Controls -->
+      <div class="flex items-center space-x-2.5">
+        <button id="toggle-audio-btn" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-200 border border-slate-700/60 transition shadow-sm">
+          <svg id="audio-icon-on" class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
+          </svg>
+          <svg id="audio-icon-off" class="w-3.5 h-3.5 text-slate-500 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"></path>
+          </svg>
+          <span id="audio-label">SFX: On</span>
+        </button>
+
+        <button id="toggle-tts-btn" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-200 border border-slate-700/60 transition shadow-sm">
+          <svg class="w-3.5 h-3.5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+          </svg>
+          <span id="tts-label">Voice: On</span>
+        </button>
+
+        <button id="export-video-btn" class="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-xs font-bold text-white shadow-md shadow-emerald-600/20 transition active:scale-95">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+          </svg>
+          <span id="export-video-text">Export Video (WebM)</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Studio Workspace Grid -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-5 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+    
+    <!-- LEFT PANEL: Multi-Tab Studio Editor (5 cols) -->
+    <div class="lg:col-span-5 flex flex-col space-y-4">
+      
+      <!-- Studio Tabs Navigation -->
+      <div class="flex items-center bg-slate-900 border border-slate-800 rounded-xl p-1 shadow-sm">
+        <button id="tab-btn-script" class="flex-1 py-2 px-3 text-xs font-semibold rounded-lg bg-indigo-600 text-white transition flex items-center justify-center space-x-1.5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+          </svg>
+          <span>Script & AI</span>
+        </button>
+        <button id="tab-btn-text" class="flex-1 py-2 px-3 text-xs font-semibold rounded-lg text-slate-400 hover:text-slate-200 transition flex items-center justify-center space-x-1.5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16"></path>
+          </svg>
+          <span>Text & Typography</span>
+        </button>
+        <button id="tab-btn-pictorial" class="flex-1 py-2 px-3 text-xs font-semibold rounded-lg text-slate-400 hover:text-slate-200 transition flex items-center justify-center space-x-1.5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+          </svg>
+          <span>Pictorial Forms</span>
+        </button>
+      </div>
+
+      <!-- TAB 1: SCRIPT & AI GENERATION PANEL -->
+      <div id="tab-content-script" class="space-y-4">
+        <!-- Script Input Card -->
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl backdrop-blur">
+          <div class="flex items-center justify-between mb-3">
+            <label for="script-input" class="text-xs uppercase tracking-wider font-bold text-slate-300 flex items-center">
+              Video Script Input
+            </label>
+            <span id="char-count" class="text-xs font-mono text-slate-400">0 words</span>
+          </div>
+
+          <!-- Presets -->
+          <div class="mb-3">
+            <div class="text-[11px] text-slate-400 font-medium mb-1.5 flex items-center justify-between">
+              <span>Quick Script Presets:</span>
+              <span class="text-indigo-400 text-[10px]">Click to Load</span>
+            </div>
+            <div class="grid grid-cols-2 gap-1.5">
+              <button id="preset-cyber" class="text-left text-xs px-2.5 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 border border-slate-700/50 transition">
+                ⚡ <strong>Cyber AI</strong> <span class="text-[10px] text-slate-400 block">Tech metrics & silicon</span>
+              </button>
+              <button id="preset-launch" class="text-left text-xs px-2.5 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 border border-slate-700/50 transition">
+                🚀 <strong>Product Launch</strong> <span class="text-[10px] text-slate-400 block">Workflow & vs pills</span>
+              </button>
+              <button id="preset-mind" class="text-left text-xs px-2.5 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 border border-slate-700/50 transition">
+                🌿 <strong>Mindful Zen</strong> <span class="text-[10px] text-slate-400 block">Cognitive score gauge</span>
+              </button>
+              <button id="preset-space" class="text-left text-xs px-2.5 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 border border-slate-700/50 transition">
+                🌌 <strong>Deep Cosmos</strong> <span class="text-[10px] text-slate-400 block">Sensor telemetry HUD</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Textarea -->
+          <textarea
+            id="script-input"
+            rows="6"
+            placeholder="Type or paste your video narration script here. Each line or sentence will automatically become a slide with kinetic typography & matching pictorial infographic..."
+            class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 font-normal leading-relaxed resize-y shadow-inner"
+          ></textarea>
+
+          <!-- Art & Motion Defaults -->
+          <div class="mt-3 pt-3 border-t border-slate-800/80 grid grid-cols-2 gap-2.5">
+            <div>
+              <label class="text-[11px] text-slate-400 font-medium block mb-1">Canvas Art Theme</label>
+              <select id="theme-select" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+                <option value="cyberpunk">Cyberpunk Neon</option>
+                <option value="cosmic">Cosmic Void & Nebula</option>
+                <option value="minimal-tech">Minimal Studio Tech</option>
+                <option value="matrix">Digital Matrix Flow</option>
+                <option value="sunset">Vibrant Sunset Horizon</option>
+                <option value="emerald">Emerald Neural Net</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-[11px] text-slate-400 font-medium block mb-1">Kinetic Animation Style</label>
+              <select id="kinetic-mode-select" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+                <option value="karaoke-pop">Kinetic Word-by-Word Pop</option>
+                <option value="glitch-holo">Hologram Cyber Glitch</option>
+                <option value="scanline-laser">Laser Scanline Reveal</option>
+                <option value="cinematic-fade">Cinematic Smooth Drift</option>
+                <option value="punchy-spring">Elastic Bold Spring</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Generate Button -->
+          <div class="mt-4">
+            <button
+              id="generate-btn"
+              class="w-full flex items-center justify-center space-x-2 py-3 px-4 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:via-purple-500 hover:to-pink-500 text-white font-bold text-sm shadow-lg shadow-indigo-500/25 transition active:scale-[0.99] disabled:opacity-50"
+            >
+              <svg id="generate-icon" class="w-4 h-4 animate-spin hidden" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <svg id="generate-spark" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+              <span id="generate-text">Generate Animated Slides & Pictorials</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: ADVANCED TEXT & TYPOGRAPHY STUDIO PANEL -->
+      <div id="tab-content-text" class="space-y-4 hidden">
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl backdrop-blur">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs uppercase tracking-wider font-bold text-indigo-300 flex items-center">
+              <svg class="w-4 h-4 mr-1 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+              </svg>
+              Edit Active Scene Text (#<span id="edit-scene-num-badge">1</span>)
+            </span>
+            <span class="text-[10px] text-slate-400">Live Typography Sync</span>
+          </div>
+
+          <!-- Active Scene Text Edit Area -->
+          <div class="mb-3">
+            <label class="text-[11px] text-slate-400 font-medium block mb-1">Slide Narration Text</label>
+            <textarea
+              id="edit-scene-text"
+              rows="3"
+              class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 font-normal leading-relaxed shadow-inner"
+              placeholder="Edit text for the selected scene..."
+            ></textarea>
+          </div>
+
+          <!-- Font Family & Size Controls -->
+          <div class="grid grid-cols-2 gap-2.5 mb-3">
+            <div>
+              <label class="text-[11px] text-slate-400 font-medium block mb-1">Font Family</label>
+              <select id="edit-font-family" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+                <option value="font-space">Space Grotesk (Tech/Bold)</option>
+                <option value="font-syne">Syne (High Impact Display)</option>
+                <option value="font-outfit">Outfit (Modern Clean)</option>
+                <option value="font-playfair">Playfair Display (Editorial)</option>
+                <option value="font-inter">Inter (Structured UI)</option>
+                <option value="font-mono">JetBrains Mono (Code/Terminal)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="text-[11px] text-slate-400 font-medium block mb-1">Font Scale</label>
+              <select id="edit-font-size" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+                <option value="text-lg sm:text-xl">Standard (Medium)</option>
+                <option value="text-xl sm:text-2xl" selected>Large (Default)</option>
+                <option value="text-2xl sm:text-3xl">Extra Large (Hero)</option>
+                <option value="text-3xl sm:text-4xl">Massive (Punchy)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Alignment & Vertical Placement -->
+          <div class="grid grid-cols-2 gap-2.5 mb-3">
+            <div>
+              <label class="text-[11px] text-slate-400 font-medium block mb-1">Text Alignment</label>
+              <div class="inline-flex rounded-lg bg-slate-950 p-0.5 border border-slate-800 w-full">
+                <button id="align-left-btn" class="flex-1 py-1 text-xs rounded text-slate-400 hover:text-white transition">Left</button>
+                <button id="align-center-btn" class="flex-1 py-1 text-xs rounded bg-indigo-600 text-white font-medium transition">Center</button>
+                <button id="align-right-btn" class="flex-1 py-1 text-xs rounded text-slate-400 hover:text-white transition">Right</button>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-[11px] text-slate-400 font-medium block mb-1">Vertical Anchor</label>
+              <div class="inline-flex rounded-lg bg-slate-950 p-0.5 border border-slate-800 w-full">
+                <button id="pos-top-btn" class="flex-1 py-1 text-xs rounded text-slate-400 hover:text-white transition">Top</button>
+                <button id="pos-mid-btn" class="flex-1 py-1 text-xs rounded bg-indigo-600 text-white font-medium transition">Mid</button>
+                <button id="pos-bot-btn" class="flex-1 py-1 text-xs rounded text-slate-400 hover:text-white transition">Bot</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Custom Keyword Highlighting -->
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <label class="text-[11px] text-slate-400 font-medium">Highlight Focus Words</label>
+              <button id="auto-extract-keywords-btn" class="text-[10px] text-indigo-400 hover:text-indigo-300">Auto Detect</button>
+            </div>
+            <input
+              id="edit-keywords-input"
+              type="text"
+              placeholder="e.g. neural, speed, breakthrough, realtime (comma separated)"
+              class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+            />
+          </div>
+
+          <!-- Highlight Gradient Preset -->
+          <div class="grid grid-cols-2 gap-2.5 mb-3">
+            <div>
+              <label class="text-[11px] text-slate-400 font-medium block mb-1">Highlight Glow Palette</label>
+              <select id="edit-glow-color" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+                <option value="from-pink-400 via-purple-300 to-indigo-300">Holo Pink & Purple</option>
+                <option value="from-cyan-400 via-teal-300 to-emerald-300">Cyber Cyan & Mint</option>
+                <option value="from-amber-400 via-orange-400 to-rose-400">Electric Gold & Fire</option>
+                <option value="from-blue-400 via-indigo-300 to-violet-400">Royal Cobalt Glow</option>
+                <option value="from-emerald-400 via-green-300 to-teal-300">Matrix Emerald Glow</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="text-[11px] text-slate-400 font-medium block mb-1">Scene Duration (seconds)</label>
+              <input
+                id="edit-scene-duration"
+                type="number"
+                min="2"
+                max="15"
+                step="0.5"
+                value="4"
+                class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+              />
+            </div>
+          </div>
+
+          <!-- Apply Changes Button -->
+          <button id="apply-text-edits-btn" class="w-full py-2 px-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition shadow-md">
+            Update Scene Typography
+          </button>
+        </div>
+      </div>
+
+      <!-- TAB 3: PICTORIAL FORMS & INFOGRAPHICS PANEL -->
+      <div id="tab-content-pictorial" class="space-y-4 hidden">
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl backdrop-blur">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs uppercase tracking-wider font-bold text-emerald-400 flex items-center">
+              <svg class="w-4 h-4 mr-1 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
+              </svg>
+              Pictorial Graphic Forms
+            </span>
+            <span class="text-[10px] text-slate-400">Integrated Motion Elements</span>
+          </div>
+
+          <!-- Select Pictorial Type for Current Scene -->
+          <div class="mb-3">
+            <label class="text-[11px] text-slate-400 font-medium block mb-1">Pictorial Graphic Style</label>
+            <select id="edit-pictorial-type" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-emerald-500">
+              <option value="none">None (Typography & Backdrop Only)</option>
+              <option value="metric_badge">📊 Hero Metric Stat Badge (+140% / 0.8ms)</option>
+              <option value="diagram_flow">🔄 3-Step Process Flowchart Diagram</option>
+              <option value="tech_hud">🎯 Holographic Radar & Coordinate HUD</option>
+              <option value="circular_gauge">⏱️ Circular Precision Progress Gauge</option>
+              <option value="comparison_pill">⚖️ Side-by-Side Comparison Pills</option>
+              <option value="concept_card">✨ Animated Concept Feature Card</option>
+              <option value="bar_chart">📈 Dynamic Metric Bar Visualizer</option>
+            </select>
+          </div>
+
+          <!-- Dynamic Pictorial Form Config Inputs -->
+          <div id="pictorial-custom-fields" class="space-y-2.5 p-3 bg-slate-950/80 rounded-xl border border-slate-800/80">
+            <div>
+              <label class="text-[10px] text-slate-400 block mb-0.5" id="pictorial-field1-label">Hero Metric / Value</label>
+              <input id="pictorial-field1-val" type="text" value="99.9%" class="w-full bg-slate-900 border border-slate-800 rounded px-2 py-1 text-xs text-slate-200">
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-400 block mb-0.5" id="pictorial-field2-label">Metric Label / Description</label>
+              <input id="pictorial-field2-val" type="text" value="Speed Optimization" class="w-full bg-slate-900 border border-slate-800 rounded px-2 py-1 text-xs text-slate-200">
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-400 block mb-0.5" id="pictorial-field3-label">Subtext / Secondary Data</label>
+              <input id="pictorial-field3-val" type="text" value="Real-time neuromorphic streaming" class="w-full bg-slate-900 border border-slate-800 rounded px-2 py-1 text-xs text-slate-200">
+            </div>
+          </div>
+
+          <div class="mt-3 flex items-center space-x-2">
+            <button id="apply-pictorial-btn" class="flex-1 py-2 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition shadow-md">
+              Apply Pictorial Form
+            </button>
+            <button id="insert-pictorial-slide-btn" class="py-2 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-300 font-semibold text-xs border border-emerald-800/50 transition">
+              + Insert As New Slide
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCENES SEQUENCE DRAWER (Always visible below active tab) -->
+      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl backdrop-blur">
+        <div class="flex items-center justify-between mb-2.5">
+          <h2 class="text-xs uppercase tracking-wider font-bold text-slate-300 flex items-center">
+            <svg class="w-3.5 h-3.5 mr-1.5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+            </svg>
+            Slide Timeline (<span id="scene-count-badge">0</span>)
+          </h2>
+          <div class="flex items-center space-x-1.5">
+            <button id="add-scene-btn" class="text-[11px] px-2 py-1 rounded bg-indigo-950 text-indigo-300 hover:bg-indigo-900 border border-indigo-800/60 font-medium transition">
+              + Add Slide
+            </button>
+            <button id="view-manifest-btn" class="text-[11px] px-2 py-1 rounded bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700 font-medium transition">
+              JSON
+            </button>
+          </div>
+        </div>
+
+        <div id="scenes-editor-list" class="space-y-2 max-h-[260px] overflow-y-auto pr-1">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL: Live Interactive Stage & Motion Canvas (7 cols) -->
+    <div class="lg:col-span-7 flex flex-col space-y-4">
+      
+      <!-- Stage Header / Format & Aspect Ratio Selector -->
+      <div class="bg-slate-900/80 border border-slate-800 rounded-xl px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 backdrop-blur">
+        <div class="flex items-center space-x-2">
+          <span class="text-xs font-semibold text-slate-400">Aspect Ratio:</span>
+          <div class="inline-flex rounded-lg bg-slate-950 p-0.5 border border-slate-800">
+            <button id="aspect-9-16-btn" class="px-2.5 py-1 text-xs rounded-md bg-indigo-600 text-white font-medium transition">
+              9:16 (Shorts/Reels)
+            </button>
+            <button id="aspect-16-9-btn" class="px-2.5 py-1 text-xs rounded-md text-slate-400 hover:text-slate-200 transition">
+              16:9 (Landscape)
+            </button>
+            <button id="aspect-1-1-btn" class="px-2.5 py-1 text-xs rounded-md text-slate-400 hover:text-slate-200 transition">
+              1:1 (Square)
+            </button>
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-2 text-xs">
+          <span id="current-scene-tag" class="px-2.5 py-0.5 rounded-full font-mono text-[11px] bg-indigo-950 text-indigo-300 border border-indigo-800/60">
+            Scene 1 of 5
+          </span>
+          <button id="snapshot-btn" class="px-2 py-1 rounded-md text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition flex items-center space-x-1" title="Download Slide Image (PNG)">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+            <span class="text-[11px]">Snapshot</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MAIN ANIMATED STAGE / PLAYER CONTAINER -->
+      <div id="player-container" class="relative w-full max-w-[420px] mx-auto bg-slate-950 border-2 border-slate-800 rounded-3xl overflow-hidden shadow-2xl transition-all duration-300 aspect-9-16 flex flex-col justify-between select-none">
+        
+        <!-- Background Layer: Procedural Visual Canvas -->
+        <canvas id="visual-canvas" class="absolute inset-0 w-full h-full object-cover z-0"></canvas>
+
+        <!-- Background Layer: Image / Gradient Backdrop Overlay -->
+        <div id="image-backdrop" class="absolute inset-0 bg-cover bg-center transition-all duration-700 opacity-60 z-0 scale-105 filter brightness-90"></div>
+
+        <!-- Ambient Light Glow Vignette -->
+        <div id="ambient-vignette" class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-950/60 z-10 pointer-events-none"></div>
+
+        <!-- Scanline & Hologram Overlay -->
+        <div id="scanline-layer" class="scanline-overlay absolute inset-0 z-10 pointer-events-none opacity-40"></div>
+        <div id="laser-line-element" class="laser-line z-10 pointer-events-none"></div>
+
+        <!-- TOP STAGE: Badges & Scene Indicators -->
+        <div class="relative z-20 p-4 sm:p-5 flex items-center justify-between">
+          <div class="flex items-center space-x-2">
+            <span id="stage-badge-number" class="px-2.5 py-1 rounded-lg bg-black/70 backdrop-blur-md text-[11px] font-mono font-bold text-white border border-white/10 shadow-lg">
+              01
+            </span>
+            <span id="stage-badge-mood" class="px-2.5 py-1 rounded-lg bg-indigo-500/30 backdrop-blur-md text-[10px] font-semibold text-indigo-200 border border-indigo-400/30 uppercase tracking-wider">
+              Transition
+            </span>
+          </div>
+
+          <div id="stage-badge-pictorial" class="px-2.5 py-1 rounded-lg bg-emerald-500/20 backdrop-blur-md text-[10px] font-mono text-emerald-200 border border-emerald-400/20 flex items-center space-x-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+            <span id="stage-pictorial-name">metric_badge</span>
+          </div>
+        </div>
+
+        <!-- CENTER STAGE: DYNAMIC KINETIC TYPOGRAPHY & PICTORIAL FORMS CONTAINER -->
+        <div id="stage-center-content" class="relative z-20 px-6 sm:px-8 py-2 my-auto flex flex-col items-center justify-center text-center space-y-4">
+          
+          <!-- PICTORIAL FORMS INJECTED CONTAINER (Between or with text) -->
+          <div id="stage-pictorial-container" class="w-full flex items-center justify-center transition-all duration-500">
+            <!-- Rendered pictorial infographic elements -->
+          </div>
+
+          <!-- Active Scene Main Animated Text -->
+          <div id="kinetic-text-wrapper" class="w-full flex flex-wrap items-center justify-center gap-x-2 gap-y-1 sm:gap-x-2.5 sm:gap-y-1.5 font-space">
+            <!-- Word-by-word rendered kinetic elements -->
+          </div>
+
+          <!-- Secondary Subtitle/Prompt badge -->
+          <div id="kinetic-prompt-badge" class="px-3 py-1 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-[10px] text-slate-300 max-w-[90%] truncate opacity-90 transition-opacity">
+            Visual Concept: Neural Network Stream
+          </div>
+        </div>
+
+        <!-- BOTTOM STAGE: Mini audio visualizer & progress tick bar -->
+        <div class="relative z-20 p-4 sm:p-5 flex flex-col space-y-2.5">
+          <!-- Audio Waveform Visualizer simulation -->
+          <div class="flex items-center justify-center space-x-1 h-3.5">
+            <div class="w-1 bg-indigo-400/80 rounded-full h-2 animate-pulse"></div>
+            <div class="w-1 bg-purple-400/80 rounded-full h-3 animate-pulse" style="animation-delay: 0.1s"></div>
+            <div class="w-1 bg-pink-400/80 rounded-full h-3.5 animate-pulse" style="animation-delay: 0.2s"></div>
+            <div class="w-1 bg-cyan-400/80 rounded-full h-2.5 animate-pulse" style="animation-delay: 0.3s"></div>
+            <div class="w-1 bg-emerald-400/80 rounded-full h-1.5 animate-pulse" style="animation-delay: 0.4s"></div>
+          </div>
+
+          <!-- Scene progress tick bar -->
+          <div class="w-full bg-white/10 h-1.5 rounded-full overflow-hidden backdrop-blur-sm">
+            <div id="scene-progress-bar" class="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 w-0 transition-all duration-75"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PLAYBACK CONTROLS BAR -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-xl backdrop-blur flex flex-col space-y-3">
+        <!-- Main Scrub Timeline -->
+        <div class="flex items-center space-x-3">
+          <span id="time-current" class="font-mono text-xs text-slate-400 w-10 text-right">00:00</span>
+          
+          <div class="relative flex-1 group">
+            <input
+              id="timeline-slider"
+              type="range"
+              min="0"
+              max="100"
+              value="0"
+              step="0.1"
+              class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-500 focus:outline-none"
+            />
+            <!-- Scene Jump Markers -->
+            <div id="timeline-markers" class="absolute inset-0 pointer-events-none flex justify-between px-1 items-center"></div>
+          </div>
+
+          <span id="time-total" class="font-mono text-xs text-slate-400 w-10">00:20</span>
+        </div>
+
+        <!-- Buttons Row -->
+        <div class="flex items-center justify-between pt-1">
+          <!-- Left playback buttons -->
+          <div class="flex items-center space-x-2">
+            <button id="prev-scene-btn" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 transition" title="Previous Scene">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+              </svg>
+            </button>
+
+            <button id="play-pause-btn" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs flex items-center space-x-1.5 shadow-lg shadow-indigo-600/30 transition active:scale-95">
+              <svg id="play-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <svg id="pause-icon" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <span id="play-btn-text">Play All</span>
+            </button>
+
+            <button id="next-scene-btn" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 transition" title="Next Scene">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </button>
+
+            <button id="restart-btn" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 transition" title="Replay from Beginning">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Right: Speed & Loop -->
+          <div class="flex items-center space-x-2">
+            <button id="speed-btn" class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono transition">
+              1.0x
+            </button>
+            <button id="loop-btn" class="p-2 rounded-lg bg-indigo-950 text-indigo-400 border border-indigo-800/60 transition" title="Toggle Loop">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- MANIFEST MODAL (JSON PREVIEW) -->
+  <div id="manifest-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="px-5 py-4 border-b border-slate-800 flex items-center justify-between">
+        <div>
+          <h3 class="text-sm font-bold text-white font-space">Render Manifest (JSON)</h3>
+          <p class="text-xs text-slate-400">Complete scene sequence & pictorial data for ffmpeg</p>
+        </div>
+        <button id="close-modal-btn" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="p-4 flex-1 overflow-auto bg-slate-950">
+        <pre id="modal-json-content" class="text-xs text-indigo-300 font-mono leading-relaxed"></pre>
+      </div>
+      <div class="px-5 py-3 border-t border-slate-800 bg-slate-900 flex justify-end space-x-2">
+        <button id="copy-manifest-modal-btn" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition">
+          Copy JSON
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ==========================================
+    // PRESETS DATA WITH PICTORIAL FORMS
+    // ==========================================
+    const PRESETS = {
+      cyber: "Introducing the next generation of neuromorphic computing.\nIt processes sensory streams in real time with ultra-low latency.\nImagine having instant cognitive insights at the speed of thought.\nThe breakthrough lies in 3D silicon quantum architecture.\nExperience the future of intelligence today.",
+      launch: "Say goodbye to clunky video rendering timelines.\nType your script once, and generate kinetic animations instantly.\nSmart sound design and procedural visuals bring your story to life.\nExport directly to social reels, presentations, and shorts.\nCreate without limits.",
+      mind: "Take a deep breath and center your focus.\nIn a world filled with endless noise, clarity is your superpower.\nEvery mindful moment strengthens your cognitive resilience.\nTrack your daily progress and cultivate sustainable habits.\nBegin your journey to calm today.",
+      space: "Deep beneath the Arctic ice sheet, sensors detected an anomaly.\nA faint harmonic resonance, repeating every twelve minutes.\nInitial telemetry data rules out seismic or biological origin.\nScientists are preparing an expedition to reach the rift.\nWhat lies below could reshape our understanding of history."
+    };
+
+    // ==========================================
+    // PROCEDURAL WEB AUDIO SYNTHESIZER
+    // ==========================================
+    class SoundEngine {
+      constructor() {
+        this.ctx = null;
+        this.enabled = true;
+        this.ambientGain = null;
+        this.ambientOsc1 = null;
+        this.ambientOsc2 = null;
+      }
+
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioContext();
+        }
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+
+      playWhoosh(intensity = 1.0) {
+        if (!this.enabled) return;
+        this.init();
+        const now = this.ctx.currentTime;
+        const bufferSize = this.ctx.sampleRate * 0.35;
+        const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+        const output = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) output[i] = Math.random() * 2 - 1;
+
+        const whiteNoise = this.ctx.createBufferSource();
+        whiteNoise.buffer = buffer;
+
+        const filter = this.ctx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(350, now);
+        filter.frequency.exponentialRampToValueAtTime(3200, now + 0.18);
+        filter.frequency.exponentialRampToValueAtTime(200, now + 0.35);
+        filter.Q.setValueAtTime(3.0, now);
+
+        const gain = this.ctx.createGain();
+        gain.gain.setValueAtTime(0.01, now);
+        gain.gain.exponentialRampToValueAtTime(0.24 * intensity, now + 0.15);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+        whiteNoise.connect(filter);
+        filter.connect(gain);
+        gain.connect(this.ctx.destination);
+        whiteNoise.start(now);
+        whiteNoise.stop(now + 0.35);
+      }
+
+      playRiser() {
+        if (!this.enabled) return;
+        this.init();
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(140, now);
+        osc.frequency.exponentialRampToValueAtTime(680, now + 0.45);
+
+        gain.gain.setValueAtTime(0.01, now);
+        gain.gain.exponentialRampToValueAtTime(0.16, now + 0.3);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.5);
+      }
+
+      playPopBlip(freq = 520) {
+        if (!this.enabled) return;
+        this.init();
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now);
+        osc.frequency.exponentialRampToValueAtTime(freq * 1.4, now + 0.08);
+
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.08);
+      }
+
+      startAmbientBed() {
+        if (!this.enabled || this.ambientOsc1) return;
+        this.init();
+        const now = this.ctx.currentTime;
+
+        this.ambientGain = this.ctx.createGain();
+        this.ambientGain.gain.setValueAtTime(0.035, now);
+
+        this.ambientOsc1 = this.ctx.createOscillator();
+        this.ambientOsc1.type = 'triangle';
+        this.ambientOsc1.frequency.setValueAtTime(65.4, now);
+
+        this.ambientOsc2 = this.ctx.createOscillator();
+        this.ambientOsc2.type = 'sine';
+        this.ambientOsc2.frequency.setValueAtTime(98.0, now);
+
+        this.ambientOsc1.connect(this.ambientGain);
+        this.ambientOsc2.connect(this.ambientGain);
+        this.ambientGain.connect(this.ctx.destination);
+
+        this.ambientOsc1.start();
+        this.ambientOsc2.start();
+      }
+
+      stopAmbientBed() {
+        if (this.ambientOsc1) {
+          try {
+            this.ambientOsc1.stop();
+            this.ambientOsc2.stop();
+          } catch(e) {}
+          this.ambientOsc1 = null;
+          this.ambientOsc2 = null;
+        }
+      }
+    }
+
+    const soundEngine = new SoundEngine();
+
+    // ==========================================
+    // PROCEDURAL CANVAS VISUAL ENGINE
+    // ==========================================
+    class VisualCanvasEngine {
+      constructor(canvas) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
+        this.particles = [];
+        this.theme = 'cyberpunk';
+        this.animationId = null;
+        this.width = canvas.width = 720;
+        this.height = canvas.height = 1280;
+        this.tick = 0;
+        this.initParticles();
+        this.loop = this.loop.bind(this);
+        this.loop();
+      }
+
+      setTheme(newTheme) {
+        this.theme = newTheme;
+        this.initParticles();
+      }
+
+      initParticles() {
+        this.particles = [];
+        const count = 40;
+        for (let i = 0; i < count; i++) {
+          this.particles.push({
+            x: Math.random() * this.width,
+            y: Math.random() * this.height,
+            vx: (Math.random() - 0.5) * 1.4,
+            vy: (Math.random() - 0.5) * 1.4,
+            radius: Math.random() * 2.5 + 1.2,
+            color: this.getThemeColor(Math.random())
+          });
+        }
+      }
+
+      getThemeColor(rand) {
+        if (this.theme === 'cyberpunk') return rand > 0.5 ? '#a855f7' : '#06b6d4';
+        if (this.theme === 'cosmic') return rand > 0.5 ? '#818cf8' : '#ec4899';
+        if (this.theme === 'matrix') return '#10b981';
+        if (this.theme === 'sunset') return rand > 0.5 ? '#f97316' : '#ec4899';
+        return rand > 0.5 ? '#6366f1' : '#38bdf8';
+      }
+
+      loop() {
+        this.tick++;
+        const { ctx, width, height } = this;
+        ctx.clearRect(0, 0, width, height);
+
+        // Radial backdrop gradient
+        const grad = ctx.createRadialGradient(
+          width / 2 + Math.sin(this.tick * 0.02) * 80,
+          height / 2 + Math.cos(this.tick * 0.015) * 100,
+          20,
+          width / 2,
+          height / 2,
+          width * 0.85
+        );
+
+        if (this.theme === 'cyberpunk') {
+          grad.addColorStop(0, 'rgba(79, 70, 229, 0.4)');
+          grad.addColorStop(0.5, 'rgba(168, 85, 247, 0.25)');
+          grad.addColorStop(1, 'rgba(10, 10, 20, 0.95)');
+        } else if (this.theme === 'cosmic') {
+          grad.addColorStop(0, 'rgba(192, 38, 211, 0.35)');
+          grad.addColorStop(0.5, 'rgba(67, 56, 202, 0.2)');
+          grad.addColorStop(1, 'rgba(5, 5, 15, 0.95)');
+        } else if (this.theme === 'matrix') {
+          grad.addColorStop(0, 'rgba(16, 185, 129, 0.3)');
+          grad.addColorStop(1, 'rgba(2, 20, 10, 0.95)');
+        } else {
+          grad.addColorStop(0, 'rgba(99, 102, 241, 0.35)');
+          grad.addColorStop(1, 'rgba(15, 23, 42, 0.95)');
+        }
+
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, width, height);
+
+        // Particle Mesh
+        ctx.lineWidth = 0.8;
+        for (let i = 0; i < this.particles.length; i++) {
+          const p1 = this.particles[i];
+          p1.x += p1.vx;
+          p1.y += p1.vy;
+          if (p1.x < 0 || p1.x > width) p1.vx *= -1;
+          if (p1.y < 0 || p1.y > height) p1.vy *= -1;
+
+          ctx.beginPath();
+          ctx.arc(p1.x, p1.y, p1.radius, 0, Math.PI * 2);
+          ctx.fillStyle = p1.color;
+          ctx.fill();
+
+          for (let j = i + 1; j < this.particles.length; j++) {
+            const p2 = this.particles[j];
+            const dist = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+            if (dist < 110) {
+              ctx.strokeStyle = p1.color;
+              ctx.globalAlpha = (1 - dist / 110) * 0.35;
+              ctx.beginPath();
+              ctx.moveTo(p1.x, p1.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.stroke();
+              ctx.globalAlpha = 1.0;
+            }
+          }
+        }
+
+        this.animationId = requestAnimationFrame(this.loop);
+      }
+    }
+
+    // ==========================================
+    // APPLICATION STATE & CONTROLLER
+    // ==========================================
+    let canvasEngine = null;
+    let manifestData = null;
+    let currentSceneIndex = 0;
+    let isPlaying = false;
+    let playbackTimer = null;
+    let playbackSpeed = 1.0;
+    let isLooping = true;
+    let ttsEnabled = true;
+    let mediaRecorder = null;
+    let recordedChunks = [];
+
+    // DOM Elements
+    const scriptInput = document.getElementById('script-input');
+    const charCount = document.getElementById('char-count');
+    const generateBtn = document.getElementById('generate-btn');
+    const generateText = document.getElementById('generate-text');
+    const generateIcon = document.getElementById('generate-icon');
+    const generateSpark = document.getElementById('generate-spark');
+    const themeSelect = document.getElementById('theme-select');
+    const kineticModeSelect = document.getElementById('kinetic-mode-select');
+    const scenesEditorList = document.getElementById('scenes-editor-list');
+    const sceneCountBadge = document.getElementById('scene-count-badge');
+    const playerContainer = document.getElementById('player-container');
+    const imageBackdrop = document.getElementById('image-backdrop');
+    const stageBadgeNumber = document.getElementById('stage-badge-number');
+    const stageBadgeMood = document.getElementById('stage-badge-mood');
+    const stageBadgePictorial = document.getElementById('stage-badge-pictorial');
+    const stagePictorialName = document.getElementById('stage-pictorial-name');
+    const stagePictorialContainer = document.getElementById('stage-pictorial-container');
+    const kineticTextWrapper = document.getElementById('kinetic-text-wrapper');
+    const kineticPromptBadge = document.getElementById('kinetic-prompt-badge');
+    const currentSceneTag = document.getElementById('current-scene-tag');
+    const sceneProgressBar = document.getElementById('scene-progress-bar');
+    const timeCurrent = document.getElementById('time-current');
+    const timeTotal = document.getElementById('time-total');
+    const timelineSlider = document.getElementById('timeline-slider');
+    const timelineMarkers = document.getElementById('timeline-markers');
+    const playPauseBtn = document.getElementById('play-pause-btn');
+    const playIcon = document.getElementById('play-icon');
+    const pauseIcon = document.getElementById('pause-icon');
+    const playBtnText = document.getElementById('play-btn-text');
+    const prevSceneBtn = document.getElementById('prev-scene-btn');
+    const nextSceneBtn = document.getElementById('next-scene-btn');
+    const restartBtn = document.getElementById('restart-btn');
+    const speedBtn = document.getElementById('speed-btn');
+    const loopBtn = document.getElementById('loop-btn');
+    const snapshotBtn = document.getElementById('snapshot-btn');
+    const toggleAudioBtn = document.getElementById('toggle-audio-btn');
+    const audioIconOn = document.getElementById('audio-icon-on');
+    const audioIconOff = document.getElementById('audio-icon-off');
+    const audioLabel = document.getElementById('audio-label');
+    const toggleTtsBtn = document.getElementById('toggle-tts-btn');
+    const ttsLabel = document.getElementById('tts-label');
+    const exportVideoBtn = document.getElementById('export-video-btn');
+    const exportVideoText = document.getElementById('export-video-text');
+    const viewManifestBtn = document.getElementById('view-manifest-btn');
+    const manifestModal = document.getElementById('manifest-modal');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+    const modalJsonContent = document.getElementById('modal-json-content');
+    const copyManifestModalBtn = document.getElementById('copy-manifest-modal-btn');
+
+    // Tab Navigation
+    const tabBtnScript = document.getElementById('tab-btn-script');
+    const tabBtnText = document.getElementById('tab-btn-text');
+    const tabBtnPictorial = document.getElementById('tab-btn-pictorial');
+    const tabContentScript = document.getElementById('tab-content-script');
+    const tabContentText = document.getElementById('tab-content-text');
+    const tabContentPictorial = document.getElementById('tab-content-pictorial');
+
+    // Advanced Text Editor Elements
+    const editSceneNumBadge = document.getElementById('edit-scene-num-badge');
+    const editSceneText = document.getElementById('edit-scene-text');
+    const editFontFamily = document.getElementById('edit-font-family');
+    const editFontSize = document.getElementById('edit-font-size');
+    const editKeywordsInput = document.getElementById('edit-keywords-input');
+    const editGlowColor = document.getElementById('edit-glow-color');
+    const editSceneDuration = document.getElementById('edit-scene-duration');
+    const applyTextEditsBtn = document.getElementById('apply-text-edits-btn');
+    const autoExtractKeywordsBtn = document.getElementById('auto-extract-keywords-btn');
+
+    const alignLeftBtn = document.getElementById('align-left-btn');
+    const alignCenterBtn = document.getElementById('align-center-btn');
+    const alignRightBtn = document.getElementById('align-right-btn');
+    const posTopBtn = document.getElementById('pos-top-btn');
+    const posMidBtn = document.getElementById('pos-mid-btn');
+    const posBotBtn = document.getElementById('pos-bot-btn');
+
+    let currentTextAlign = "center";
+    let currentVerticalPos = "center";
+
+    // Pictorial Editor Elements
+    const editPictorialType = document.getElementById('edit-pictorial-type');
+    const pictorialCustomFields = document.getElementById('pictorial-custom-fields');
+    const pictorialField1Label = document.getElementById('pictorial-field1-label');
+    const pictorialField1Val = document.getElementById('pictorial-field1-val');
+    const pictorialField2Label = document.getElementById('pictorial-field2-label');
+    const pictorialField2Val = document.getElementById('pictorial-field2-val');
+    const pictorialField3Label = document.getElementById('pictorial-field3-label');
+    const pictorialField3Val = document.getElementById('pictorial-field3-val');
+    const applyPictorialBtn = document.getElementById('apply-pictorial-btn');
+    const insertPictorialSlideBtn = document.getElementById('insert-pictorial-slide-btn');
+
+    // Aspect buttons
+    const aspect916Btn = document.getElementById('aspect-9-16-btn');
+    const aspect169Btn = document.getElementById('aspect-16-9-btn');
+    const aspect11Btn = document.getElementById('aspect-1-1-btn');
+
+    // Preset handlers
+    document.getElementById('preset-cyber').addEventListener('click', () => { scriptInput.value = PRESETS.cyber; themeSelect.value = 'cyberpunk'; updateWordCount(); });
+    document.getElementById('preset-launch').addEventListener('click', () => { scriptInput.value = PRESETS.launch; themeSelect.value = 'sunset'; updateWordCount(); });
+    document.getElementById('preset-mind').addEventListener('click', () => { scriptInput.value = PRESETS.mind; themeSelect.value = 'minimal-tech'; updateWordCount(); });
+    document.getElementById('preset-space').addEventListener('click', () => { scriptInput.value = PRESETS.space; themeSelect.value = 'cosmic'; updateWordCount(); });
+
+    function updateWordCount() {
+      const words = scriptInput.value.trim().split(/\s+/).filter(Boolean).length;
+      charCount.textContent = `${words} words · ~${Math.ceil(words / 2.3)}s estimated`;
+    }
+    scriptInput.addEventListener('input', updateWordCount);
+
+    // Tab Switching Logic
+    function switchTab(tab) {
+      tabContentScript.classList.add('hidden');
+      tabContentText.classList.add('hidden');
+      tabContentPictorial.classList.add('hidden');
+
+      tabBtnScript.className = "flex-1 py-2 px-3 text-xs font-semibold rounded-lg text-slate-400 hover:text-slate-200 transition flex items-center justify-center space-x-1.5";
+      tabBtnText.className = "flex-1 py-2 px-3 text-xs font-semibold rounded-lg text-slate-400 hover:text-slate-200 transition flex items-center justify-center space-x-1.5";
+      tabBtnPictorial.className = "flex-1 py-2 px-3 text-xs font-semibold rounded-lg text-slate-400 hover:text-slate-200 transition flex items-center justify-center space-x-1.5";
+
+      if (tab === 'script') {
+        tabContentScript.classList.remove('hidden');
+        tabBtnScript.className = "flex-1 py-2 px-3 text-xs font-semibold rounded-lg bg-indigo-600 text-white transition flex items-center justify-center space-x-1.5";
+      } else if (tab === 'text') {
+        tabContentText.classList.remove('hidden');
+        tabBtnText.className = "flex-1 py-2 px-3 text-xs font-semibold rounded-lg bg-indigo-600 text-white transition flex items-center justify-center space-x-1.5";
+        populateTextEditorForCurrentScene();
+      } else if (tab === 'pictorial') {
+        tabContentPictorial.classList.remove('hidden');
+        tabBtnPictorial.className = "flex-1 py-2 px-3 text-xs font-semibold rounded-lg bg-emerald-600 text-white transition flex items-center justify-center space-x-1.5";
+        populatePictorialEditorForCurrentScene();
+      }
+    }
+
+    tabBtnScript.addEventListener('click', () => switchTab('script'));
+    tabBtnText.addEventListener('click', () => switchTab('text'));
+    tabBtnPictorial.addEventListener('click', () => switchTab('pictorial'));
+
+    // Audio & TTS Toggles
+    toggleAudioBtn.addEventListener('click', () => {
+      soundEngine.enabled = !soundEngine.enabled;
+      if (soundEngine.enabled) {
+        audioIconOn.classList.remove('hidden');
+        audioIconOff.classList.add('hidden');
+        audioLabel.textContent = "SFX: On";
+        toggleAudioBtn.className = "flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-200 border border-slate-700/60 transition shadow-sm";
+      } else {
+        audioIconOn.classList.add('hidden');
+        audioIconOff.classList.remove('hidden');
+        audioLabel.textContent = "SFX: Muted";
+        toggleAudioBtn.className = "flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-xs font-medium text-slate-500 border border-slate-800 transition shadow-sm";
+        soundEngine.stopAmbientBed();
+      }
+    });
+
+    toggleTtsBtn.addEventListener('click', () => {
+      ttsEnabled = !ttsEnabled;
+      if (ttsEnabled) {
+        ttsLabel.textContent = "Voice: On";
+        toggleTtsBtn.className = "flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-200 border border-slate-700/60 transition shadow-sm";
+      } else {
+        ttsLabel.textContent = "Voice: Off";
+        toggleTtsBtn.className = "flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-xs font-medium text-slate-500 border border-slate-800 transition shadow-sm";
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      }
+    });
+
+    // Aspect Ratio Toggles
+    aspect916Btn.addEventListener('click', () => {
+      playerContainer.className = "relative w-full max-w-[420px] mx-auto bg-slate-950 border-2 border-slate-800 rounded-3xl overflow-hidden shadow-2xl transition-all duration-300 aspect-9-16 flex flex-col justify-between select-none";
+      aspect916Btn.className = "px-2.5 py-1 text-xs rounded-md bg-indigo-600 text-white font-medium transition";
+      aspect169Btn.className = "px-2.5 py-1 text-xs rounded-md text-slate-400 hover:text-slate-200 transition";
+      aspect11Btn.className = "px-2.5 py-1 text-xs rounded-md text-slate-400 hover:text-slate-200 transition";
+    });
+
+    aspect169Btn.addEventListener('click', () => {
+      playerContainer.className = "relative w-full max-w-[680px] mx-auto bg-slate-950 border-2 border-slate-800 rounded-3xl overflow-hidden shadow-2xl transition-all duration-300 aspect-16-9 flex flex-col justify-between select-none";
+      aspect169Btn.className = "px-2.5 py-1 text-xs rounded-md bg-indigo-600 text-white font-medium transition";
+      aspect916Btn.className = "px-2.5 py-1 text-xs rounded-md text-slate-400 hover:text-slate-200 transition";
+      aspect11Btn.className = "px-2.5 py-1 text-xs rounded-md text-slate-400 hover:text-slate-200 transition";
+    });
+
+    aspect11Btn.addEventListener('click', () => {
+      playerContainer.className = "relative w-full max-w-[480px] mx-auto bg-slate-950 border-2 border-slate-800 rounded-3xl overflow-hidden shadow-2xl transition-all duration-300 aspect-1-1 flex flex-col justify-between select-none";
+      aspect11Btn.className = "px-2.5 py-1 text-xs rounded-md bg-indigo-600 text-white font-medium transition";
+      aspect916Btn.className = "px-2.5 py-1 text-xs rounded-md text-slate-400 hover:text-slate-200 transition";
+      aspect169Btn.className = "px-2.5 py-1 text-xs rounded-md text-slate-400 hover:text-slate-200 transition";
+    });
+
+    // Speed & Loop
+    speedBtn.addEventListener('click', () => {
+      const speeds = [0.75, 1.0, 1.25, 1.5];
+      const idx = speeds.indexOf(playbackSpeed);
+      playbackSpeed = speeds[(idx + 1) % speeds.length];
+      speedBtn.textContent = `${playbackSpeed}x`;
+    });
+
+    loopBtn.addEventListener('click', () => {
+      isLooping = !isLooping;
+      if (isLooping) {
+        loopBtn.className = "p-2 rounded-lg bg-indigo-950 text-indigo-400 border border-indigo-800/60 transition";
+      } else {
+        loopBtn.className = "p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 transition";
+      }
+    });
+
+    // Speech Synthesis
+    function speakText(text) {
+      if (!ttsEnabled || !('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 1.05 * playbackSpeed;
+      utterance.pitch = 1.0;
+      const voices = window.speechSynthesis.getVoices();
+      const englishVoice = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Samantha') || v.name.includes('David')));
+      if (englishVoice) utterance.voice = englishVoice;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    // ==========================================
+    // PICTORIAL FORMS COMPONENT GENERATOR
+    // ==========================================
+    function generatePictorialHTML(type, data) {
+      if (!type || type === 'none') return '';
+      data = data || {};
+
+      if (type === 'metric_badge') {
+        const val = data.value || '+140%';
+        const label = data.label || 'Performance Boost';
+        const sub = data.subtext || 'Ultra-low latency';
+        return `
+          <div class="animate-float px-5 py-3.5 rounded-2xl bg-black/60 backdrop-blur-xl border border-emerald-500/40 shadow-[0_0_25px_rgba(16,185,129,0.25)] flex items-center space-x-3.5 max-w-[90%]">
+            <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-lg shadow-emerald-500/30">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+            </div>
+            <div class="text-left">
+              <div class="text-2xl sm:text-3xl font-black font-space tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-teal-200 to-cyan-300">
+                ${val}
+              </div>
+              <div class="text-[11px] font-bold text-slate-200 uppercase tracking-wider">${label}</div>
+              <div class="text-[9px] text-slate-400">${sub}</div>
+            </div>
+          </div>
+        `;
+      }
+
+      if (type === 'diagram_flow') {
+        const s1 = data.step1 || 'Input Stream';
+        const s2 = data.step2 || 'Neural Core';
+        const s3 = data.step3 || 'Zero Latency';
+        return `
+          <div class="px-3.5 py-2.5 rounded-2xl bg-black/65 backdrop-blur-xl border border-indigo-500/40 shadow-xl flex items-center space-x-1.5 sm:space-x-2.5 max-w-full">
+            <div class="px-2.5 py-1.5 rounded-lg bg-indigo-950/80 border border-indigo-500/30 text-center">
+              <div class="text-[9px] text-indigo-400 font-mono">01. IN</div>
+              <div class="text-xs font-bold text-white">${s1}</div>
+            </div>
+            <div class="text-indigo-400 animate-pulse font-bold">➔</div>
+            <div class="px-2.5 py-1.5 rounded-lg bg-purple-950/80 border border-purple-500/50 text-center shadow-[0_0_15px_rgba(168,85,247,0.3)]">
+              <div class="text-[9px] text-purple-300 font-mono">02. CORE</div>
+              <div class="text-xs font-bold text-purple-200">${s2}</div>
+            </div>
+            <div class="text-indigo-400 animate-pulse font-bold">➔</div>
+            <div class="px-2.5 py-1.5 rounded-lg bg-cyan-950/80 border border-cyan-500/30 text-center">
+              <div class="text-[9px] text-cyan-400 font-mono">03. OUT</div>
+              <div class="text-xs font-bold text-white">${s3}</div>
+            </div>
+          </div>
+        `;
+      }
+
+      if (type === 'tech_hud') {
+        const sA = data.statA || 'LATENCY: 0.8ms';
+        const sB = data.statB || 'NODES: 10,000+';
+        const sC = data.statC || 'STATUS: OPTIMAL';
+        return `
+          <div class="relative px-5 py-3 rounded-2xl bg-black/70 backdrop-blur-xl border border-cyan-500/40 shadow-[0_0_20px_rgba(6,182,212,0.2)] flex flex-col items-center max-w-[88%]">
+            <div class="w-14 h-14 rounded-full border border-cyan-400/40 relative flex items-center justify-center mb-1.5 animate-ring">
+              <div class="absolute inset-1 rounded-full border border-cyan-500/60 animate-radar border-t-cyan-300"></div>
+              <span class="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]"></span>
+            </div>
+            <div class="flex items-center space-x-3 text-[10px] font-mono text-cyan-300 font-semibold tracking-wider">
+              <span>${sA}</span>
+              <span class="text-slate-600">|</span>
+              <span>${sB}</span>
+            </div>
+            <div class="text-[9px] font-mono text-emerald-400 font-bold mt-0.5 tracking-widest">${sC}</div>
+          </div>
+        `;
+      }
+
+      if (type === 'circular_gauge') {
+        const pct = data.percent || 88;
+        const lbl = data.label || 'Cognitive Focus Score';
+        const sub = data.subtext || '+14% improvement';
+        const dashoffset = 283 - (283 * pct) / 100;
+        return `
+          <div class="px-5 py-3.5 rounded-2xl bg-black/60 backdrop-blur-xl border border-pink-500/40 shadow-[0_0_25px_rgba(236,72,153,0.2)] flex items-center space-x-4 max-w-[90%]">
+            <div class="relative w-14 h-14 flex items-center justify-center">
+              <svg class="w-14 h-14 -rotate-90" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="8" />
+                <circle cx="50" cy="50" r="45" fill="none" stroke="url(#pink-grad)" stroke-width="8" stroke-dasharray="283" stroke-dashoffset="${dashoffset}" stroke-linecap="round" />
+                <defs>
+                  <linearGradient id="pink-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#ec4899" />
+                    <stop offset="100%" stop-color="#8b5cf6" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <span class="absolute font-space font-bold text-xs text-white">${pct}%</span>
+            </div>
+            <div class="text-left">
+              <div class="text-xs font-bold text-slate-100 uppercase tracking-wider">${lbl}</div>
+              <div class="text-[10px] text-emerald-400 font-semibold mt-0.5">${sub}</div>
+            </div>
+          </div>
+        `;
+      }
+
+      if (type === 'comparison_pill') {
+        const lL = data.leftLabel || 'Legacy Tools';
+        const lV = data.leftValue || 'Hours of Setup';
+        const rL = data.rightLabel || 'Kinetic Studio';
+        const rV = data.rightValue || 'Instant Slides';
+        return `
+          <div class="grid grid-cols-2 gap-2 max-w-[92%] w-full">
+            <div class="p-3 rounded-xl bg-slate-950/80 border border-rose-500/30 text-left">
+              <span class="text-[9px] uppercase tracking-wider font-bold text-rose-400 block">${lL}</span>
+              <span class="text-xs font-bold text-slate-300 block mt-0.5">${lV}</span>
+            </div>
+            <div class="p-3 rounded-xl bg-indigo-950/80 border border-emerald-500/40 text-left shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+              <span class="text-[9px] uppercase tracking-wider font-bold text-emerald-400 block">${rL}</span>
+              <span class="text-xs font-bold text-emerald-200 block mt-0.5">${rV}</span>
+            </div>
+          </div>
+        `;
+      }
+
+      if (type === 'concept_card') {
+        const title = data.title || 'Core Breakthrough';
+        const hl = data.highlight || 'Next-generation neural architecture';
+        return `
+          <div class="px-4 py-3 rounded-2xl bg-black/60 backdrop-blur-xl border border-purple-500/40 shadow-xl flex items-center space-x-3 max-w-[88%]">
+            <div class="w-9 h-9 rounded-xl bg-purple-600/30 border border-purple-400/40 flex items-center justify-center text-purple-300">
+              ✨
+            </div>
+            <div class="text-left">
+              <div class="text-[10px] font-bold text-purple-300 uppercase tracking-wider">${title}</div>
+              <div class="text-xs font-semibold text-white">${hl}</div>
+            </div>
+          </div>
+        `;
+      }
+
+      if (type === 'bar_chart') {
+        return `
+          <div class="px-4 py-3 rounded-2xl bg-black/65 backdrop-blur-xl border border-indigo-500/40 shadow-xl flex flex-col space-y-2 w-[85%]">
+            <div class="flex items-center justify-between text-[10px] font-mono text-slate-300">
+              <span>Throughput</span>
+              <span class="text-emerald-400 font-bold">12.4 GB/s</span>
+            </div>
+            <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden flex">
+              <div class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 h-full rounded-full w-[85%] animate-pulse"></div>
+            </div>
+          </div>
+        `;
+      }
+
+      return '';
+    }
+
+    // ==========================================
+    // RENDER CURRENT SCENE ON STAGE
+    // ==========================================
+    function renderCurrentScene() {
+      if (!manifestData || !manifestData.scenes || manifestData.scenes.length === 0) return;
+      
+      const scene = manifestData.scenes[currentSceneIndex];
+      const totalScenes = manifestData.scenes.length;
+
+      // Update badges
+      stageBadgeNumber.textContent = scene.scene_number < 10 ? `0${scene.scene_number}` : scene.scene_number;
+      stageBadgeMood.textContent = scene.mood || "transition";
+      stagePictorialName.textContent = scene.pictorial_type || "text_only";
+      currentSceneTag.textContent = `Scene ${currentSceneIndex + 1} of ${totalScenes}`;
+      kineticPromptBadge.textContent = scene.visual_prompt ? `Concept: ${scene.visual_prompt}` : `Mood: ${scene.mood}`;
+
+      // Update backdrop
+      if (typeof scene.visual === 'string' && (scene.visual.startsWith('http') || scene.visual.startsWith('data:'))) {
+        imageBackdrop.style.backgroundImage = `url('${scene.visual}')`;
+        imageBackdrop.style.opacity = "0.65";
+      } else {
+        imageBackdrop.style.backgroundImage = `radial-gradient(circle, rgba(99,102,241,0.25) 0%, rgba(15,23,42,0.9) 100%)`;
+        imageBackdrop.style.opacity = "0.5";
+      }
+
+      // Render Pictorial Graphic
+      const pictorialHTML = generatePictorialHTML(scene.pictorial_type, scene.pictorial_data);
+      stagePictorialContainer.innerHTML = pictorialHTML;
+      if (pictorialHTML) {
+        stageBadgePictorial.classList.remove('hidden');
+      } else {
+        stageBadgePictorial.classList.add('hidden');
+      }
+
+      // SFX Trigger
+      if (scene.mood === 'reveal') soundEngine.playWhoosh(1.2);
+      else if (scene.mood === 'emphasis') soundEngine.playRiser();
+      else if (scene.mood === 'transition') soundEngine.playWhoosh(0.8);
+      else soundEngine.playPopBlip(480);
+
+      // Voiceover Speech
+      speakText(scene.narration_text || scene.text);
+
+      // Render Word-by-Word Kinetic Typography with Custom Typography Styles
+      const typo = scene.typography || {};
+      const fontClass = typo.font_family ? `font-${typo.font_family.toLowerCase().replace(/[^a-z]/g, '')}` : 'font-space';
+      const sizeClass = typo.font_size || 'text-xl sm:text-2xl';
+      const glowGrad = typo.highlight_color || 'from-pink-400 via-purple-300 to-indigo-300';
+      const keywords = (scene.highlight_keywords || []).map(k => k.toLowerCase());
+
+      kineticTextWrapper.className = `w-full flex flex-wrap items-center justify-center gap-x-2 gap-y-1.5 ${fontClass}`;
+      kineticTextWrapper.innerHTML = '';
+
+      const words = (scene.narration_text || scene.text || "").split(/\s+/).filter(Boolean);
+
+      words.forEach((word, idx) => {
+        const clean = word.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const isFocal = keywords.includes(clean) || clean.length >= 7 || ['breakthrough', 'future', 'neural', 'instant', 'clarity', 'secret'].includes(clean);
+
+        const span = document.createElement('span');
+        span.textContent = word;
+        
+        let baseClass = "inline-block font-bold transition-all transform opacity-0 ";
+        
+        if (isFocal) {
+          baseClass += `${sizeClass} text-transparent bg-clip-text bg-gradient-to-r ${glowGrad} drop-shadow-[0_0_14px_rgba(236,72,153,0.6)] `;
+        } else {
+          baseClass += `${sizeClass} text-slate-100 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] `;
+        }
+
+        span.className = baseClass;
+        span.style.animation = `word-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards`;
+        span.style.animationDelay = `${(idx * 0.08) / playbackSpeed}s`;
+
+        kineticTextWrapper.appendChild(span);
+      });
+
+      // Synchronize editor forms if open
+      if (!tabContentText.classList.contains('hidden')) populateTextEditorForCurrentScene();
+      if (!tabContentPictorial.classList.contains('hidden')) populatePictorialEditorForCurrentScene();
+
+      // Highlight active scene in list
+      document.querySelectorAll('.scene-card-item').forEach((item, idx) => {
+        if (idx === currentSceneIndex) {
+          item.className = "scene-card-item bg-indigo-950/70 border-2 border-indigo-500 rounded-xl p-3 shadow-md flex flex-col space-y-1.5 cursor-pointer transition";
+        } else {
+          item.className = "scene-card-item bg-slate-950/70 hover:bg-slate-800/60 border border-slate-800 rounded-xl p-2.5 flex flex-col space-y-1.5 cursor-pointer transition";
+        }
+      });
+
+      updateTimelineSlider();
+    }
+
+    // Populate Text Editor Tab
+    function populateTextEditorForCurrentScene() {
+      if (!manifestData || !manifestData.scenes || !manifestData.scenes[currentSceneIndex]) return;
+      const scene = manifestData.scenes[currentSceneIndex];
+      editSceneNumBadge.textContent = scene.scene_number;
+      editSceneText.value = scene.narration_text || scene.text || "";
+      editKeywordsInput.value = (scene.highlight_keywords || []).join(', ');
+      editSceneDuration.value = scene.duration || 4;
+    }
+
+    // Populate Pictorial Editor Tab
+    function populatePictorialEditorForCurrentScene() {
+      if (!manifestData || !manifestData.scenes || !manifestData.scenes[currentSceneIndex]) return;
+      const scene = manifestData.scenes[currentSceneIndex];
+      editPictorialType.value = scene.pictorial_type || "none";
+      const pData = scene.pictorial_data || {};
+      pictorialField1Val.value = pData.value || pData.step1 || pData.statA || pData.leftValue || "99.9%";
+      pictorialField2Val.value = pData.label || pData.step2 || pData.statB || pData.rightValue || "Speed Optimization";
+      pictorialField3Val.value = pData.subtext || pData.step3 || pData.statC || "Real-time neuromorphic streaming";
+    }
+
+    // Apply Text Edits Button
+    applyTextEditsBtn.addEventListener('click', () => {
+      if (!manifestData || !manifestData.scenes || !manifestData.scenes[currentSceneIndex]) return;
+      const scene = manifestData.scenes[currentSceneIndex];
+      scene.narration_text = editSceneText.value.trim();
+      scene.text = scene.narration_text;
+      scene.duration = parseFloat(editSceneDuration.value) || 4;
+      scene.highlight_keywords = editKeywordsInput.value.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+      scene.typography = {
+        font_family: editFontFamily.value.replace('font-', ''),
+        font_size: editFontSize.value,
+        highlight_color: editGlowColor.value,
+        text_align: currentTextAlign,
+        vertical_position: currentVerticalPos
+      };
+
+      renderScenesEditor(manifestData);
+      renderCurrentScene();
+    });
+
+    // Auto Extract Keywords
+    autoExtractKeywordsBtn.addEventListener('click', () => {
+      const text = editSceneText.value;
+      const words = text.replace(/[^a-zA-Z0-9\s]/g, '').split(/\s+/).filter(w => w.length >= 6);
+      editKeywordsInput.value = words.slice(0, 3).join(', ');
+    });
+
+    // Apply Pictorial Edits Button
+    applyPictorialBtn.addEventListener('click', () => {
+      if (!manifestData || !manifestData.scenes || !manifestData.scenes[currentSceneIndex]) return;
+      const scene = manifestData.scenes[currentSceneIndex];
+      const pType = editPictorialType.value;
+      scene.pictorial_type = pType;
+      scene.pictorial_data = {
+        value: pictorialField1Val.value,
+        label: pictorialField2Val.value,
+        subtext: pictorialField3Val.value,
+        step1: pictorialField1Val.value,
+        step2: pictorialField2Val.value,
+        step3: pictorialField3Val.value,
+        statA: pictorialField1Val.value,
+        statB: pictorialField2Val.value,
+        statC: pictorialField3Val.value
+      };
+      renderScenesEditor(manifestData);
+      renderCurrentScene();
+    });
+
+    // Insert New Dedicated Pictorial Slide
+    insertPictorialSlideBtn.addEventListener('click', () => {
+      if (!manifestData) manifestData = { scenes: [] };
+      const newNum = manifestData.scenes.length + 1;
+      const pType = editPictorialType.value === 'none' ? 'metric_badge' : editPictorialType.value;
+      manifestData.scenes.push({
+        scene_number: newNum,
+        narration_text: `Key telemetry metric breakdown and performance data.`,
+        text: `Key telemetry metric breakdown and performance data.`,
+        visual_type: "2d",
+        visual_prompt: `Infographic slide ${newNum}`,
+        pictorial_type: pType,
+        pictorial_data: {
+          value: pictorialField1Val.value || "+140%",
+          label: pictorialField2Val.value || "Acceleration Rate",
+          subtext: pictorialField3Val.value || "Validated benchmark"
+        },
+        highlight_keywords: ["telemetry", "metric", "performance"],
+        mood: "emphasis",
+        duration: 4.0
+      });
+      renderScenesEditor(manifestData);
+      currentSceneIndex = manifestData.scenes.length - 1;
+      renderCurrentScene();
+    });
+
+    // ==========================================
+    // TIMELINE & PLAYBACK CONTROLLER
+    // ==========================================
+    function calculateTotalDuration() {
+      if (!manifestData || !manifestData.scenes) return 10;
+      return manifestData.scenes.reduce((acc, s) => acc + (s.duration || 4), 0);
+    }
+
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    function updateTimelineSlider() {
+      if (!manifestData || !manifestData.scenes) return;
+      const totalDur = calculateTotalDuration();
+      timeTotal.textContent = formatTime(totalDur);
+
+      let elapsed = 0;
+      for (let i = 0; i < currentSceneIndex; i++) {
+        elapsed += (manifestData.scenes[i].duration || 4);
+      }
+      timeCurrent.textContent = formatTime(elapsed);
+      timelineSlider.value = (elapsed / totalDur) * 100;
+    }
+
+    function renderTimelineMarkers() {
+      timelineMarkers.innerHTML = '';
+      if (!manifestData || !manifestData.scenes) return;
+      const totalDur = calculateTotalDuration();
+      let currentAcc = 0;
+
+      manifestData.scenes.forEach((s) => {
+        const dot = document.createElement('div');
+        const pos = (currentAcc / totalDur) * 100;
+        dot.className = "w-1.5 h-1.5 rounded-full bg-slate-600 group-hover:bg-indigo-400 transition";
+        dot.style.position = "absolute";
+        dot.style.left = `${pos}%`;
+        timelineMarkers.appendChild(dot);
+        currentAcc += (s.duration || 4);
+      });
+    }
+
+    function startPlayback() {
+      if (!manifestData || !manifestData.scenes) return;
+      isPlaying = true;
+      playIcon.classList.add('hidden');
+      pauseIcon.classList.remove('hidden');
+      playBtnText.textContent = "Pause";
+      soundEngine.startAmbientBed();
+      playNextStep();
+    }
+
+    function pausePlayback() {
+      isPlaying = false;
+      playIcon.classList.remove('hidden');
+      pauseIcon.classList.add('hidden');
+      playBtnText.textContent = "Play All";
+      clearTimeout(playbackTimer);
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      sceneProgressBar.style.transition = 'none';
+      sceneProgressBar.style.width = '0%';
+    }
+
+    function playNextStep() {
+      if (!isPlaying) return;
+
+      renderCurrentScene();
+      const currentDuration = (manifestData.scenes[currentSceneIndex].duration || 4) / playbackSpeed;
+
+      sceneProgressBar.style.transition = 'none';
+      sceneProgressBar.style.width = '0%';
+      requestAnimationFrame(() => {
+        sceneProgressBar.style.transition = `width ${currentDuration}s linear`;
+        sceneProgressBar.style.width = '100%';
+      });
+
+      playbackTimer = setTimeout(() => {
+        if (!isPlaying) return;
+        if (currentSceneIndex < manifestData.scenes.length - 1) {
+          currentSceneIndex++;
+          playNextStep();
+        } else {
+          if (isLooping) {
+            currentSceneIndex = 0;
+            playNextStep();
+          } else {
+            pausePlayback();
+          }
+        }
+      }, currentDuration * 1000);
+    }
+
+    playPauseBtn.addEventListener('click', () => {
+      if (isPlaying) pausePlayback();
+      else startPlayback();
+    });
+
+    prevSceneBtn.addEventListener('click', () => {
+      if (currentSceneIndex > 0) {
+        currentSceneIndex--;
+        renderCurrentScene();
+      }
+    });
+
+    nextSceneBtn.addEventListener('click', () => {
+      if (manifestData && currentSceneIndex < manifestData.scenes.length - 1) {
+        currentSceneIndex++;
+        renderCurrentScene();
+      }
+    });
+
+    restartBtn.addEventListener('click', () => {
+      currentSceneIndex = 0;
+      renderCurrentScene();
+      if (isPlaying) {
+        clearTimeout(playbackTimer);
+        playNextStep();
+      }
+    });
+
+    snapshotBtn.addEventListener('click', () => {
+      const link = document.createElement('a');
+      link.download = `slide-scene-${currentSceneIndex + 1}.png`;
+      link.href = canvasEngine.canvas.toDataURL('image/png');
+      link.click();
+    });
+
+    // ==========================================
+    // SCENES SEQUENCE EDITOR LIST
+    // ==========================================
+    function renderScenesEditor(manifest) {
+      sceneCountBadge.textContent = manifest.scenes?.length || 0;
+      scenesEditorList.innerHTML = '';
+
+      if (!manifest.scenes || manifest.scenes.length === 0) {
+        scenesEditorList.innerHTML = `<div class="text-xs text-slate-500 p-4 text-center">No slides generated yet.</div>`;
+        return;
+      }
+
+      manifest.scenes.forEach((scene, idx) => {
+        const item = document.createElement('div');
+        const isCurrent = idx === currentSceneIndex;
+        item.className = isCurrent
+          ? "scene-card-item bg-indigo-950/70 border-2 border-indigo-500 rounded-xl p-3 shadow-md flex flex-col space-y-1.5 cursor-pointer transition"
+          : "scene-card-item bg-slate-950/70 hover:bg-slate-800/60 border border-slate-800 rounded-xl p-2.5 flex flex-col space-y-1.5 cursor-pointer transition";
+
+        const pTag = scene.pictorial_type && scene.pictorial_type !== 'none'
+          ? `<span class="px-1.5 py-0.5 rounded text-[9px] font-mono bg-emerald-950 text-emerald-300 border border-emerald-800/50">${scene.pictorial_type}</span>`
+          : '';
+
+        item.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-1.5">
+              <span class="w-5 h-5 rounded bg-indigo-900/80 text-indigo-300 font-mono text-[10px] flex items-center justify-center font-bold">
+                ${scene.scene_number}
+              </span>
+              <span class="text-xs font-semibold text-slate-200">Slide ${scene.scene_number}</span>
+              ${pTag}
+            </div>
+            <div class="flex items-center space-x-1">
+              <span class="px-1.5 py-0.5 rounded text-[9px] font-mono bg-slate-800 text-slate-400">${scene.mood}</span>
+              <button data-delete-idx="${idx}" class="p-1 hover:text-red-400 text-slate-500 text-xs" title="Delete">&times;</button>
+            </div>
+          </div>
+          <p class="text-xs text-slate-200 font-normal leading-relaxed line-clamp-2">
+            "${scene.narration_text || scene.text}"
+          </p>
+          <div class="flex items-center justify-between text-[10px] text-slate-400 pt-1 border-t border-slate-800/60">
+            <span>Duration: <strong class="text-slate-300">${scene.duration || 4}s</strong></span>
+            <span class="text-indigo-400 hover:underline">Edit Text & Style ➔</span>
+          </div>
+        `;
+
+        item.addEventListener('click', (e) => {
+          if (e.target.dataset.deleteIdx) {
+            e.stopPropagation();
+            manifestData.scenes.splice(idx, 1);
+            if (currentSceneIndex >= manifestData.scenes.length) currentSceneIndex = Math.max(0, manifestData.scenes.length - 1);
+            renderScenesEditor(manifestData);
+            renderCurrentScene();
+            return;
+          }
+          currentSceneIndex = idx;
+          renderCurrentScene();
+        });
+
+        scenesEditorList.appendChild(item);
+      });
+
+      renderTimelineMarkers();
+    }
+
+    // Add Scene
+    document.getElementById('add-scene-btn').addEventListener('click', () => {
+      if (!manifestData) manifestData = { scenes: [] };
+      const newNum = manifestData.scenes.length + 1;
+      manifestData.scenes.push({
+        scene_number: newNum,
+        narration_text: `New custom slide ${newNum} with kinetic motion.`,
+        text: `New custom slide ${newNum} with kinetic motion.`,
+        visual_type: "2d",
+        visual_prompt: `Slide ${newNum} concept`,
+        pictorial_type: "concept_card",
+        pictorial_data: { title: `Slide ${newNum}`, highlight: "Custom kinetic typography" },
+        highlight_keywords: ["kinetic", "motion"],
+        mood: "reveal",
+        duration: 4.0
+      });
+      renderScenesEditor(manifestData);
+      currentSceneIndex = manifestData.scenes.length - 1;
+      renderCurrentScene();
+    });
+
+    // ==========================================
+    // PIPELINE API GENERATION
+    // ==========================================
+    generateBtn.addEventListener('click', async () => {
+      const script = scriptInput.value.trim();
+      if (!script) {
+        alert("Please enter a video script or select a quick preset.");
+        return;
+      }
+
+      generateBtn.disabled = true;
+      generateIcon.classList.remove('hidden');
+      generateSpark.classList.add('hidden');
+      generateText.textContent = "Synthesizing Slides & Pictorials...";
+
+      canvasEngine.setTheme(themeSelect.value);
+
+      try {
+        const response = await fetch("/api/generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ script }),
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || "Generation error");
+
+        manifestData = data.manifest;
+        currentSceneIndex = 0;
+        renderScenesEditor(manifestData);
+        renderCurrentScene();
+        startPlayback();
+      } catch (err) {
+        console.error(err);
+        alert(`Generation failed: ${err.message}`);
+      } finally {
+        generateBtn.disabled = false;
+        generateIcon.classList.add('hidden');
+        generateSpark.classList.remove('hidden');
+        generateText.textContent = "Generate Animated Slides & Pictorials";
+      }
+    });
+
+    // ==========================================
+    // EXPORT WEBM VIDEO
+    // ==========================================
+    exportVideoBtn.addEventListener('click', () => {
+      if (!manifestData || !manifestData.scenes || manifestData.scenes.length === 0) {
+        alert("Please generate animated slides before exporting.");
+        return;
+      }
+
+      if (mediaRecorder && mediaRecorder.state === 'recording') {
+        mediaRecorder.stop();
+        exportVideoText.textContent = "Export Video (WebM)";
+        return;
+      }
+
+      const stream = canvasEngine.canvas.captureStream(30);
+      recordedChunks = [];
+      try {
+        mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm; codecs=vp9' });
+      } catch(e) {
+        mediaRecorder = new MediaRecorder(stream);
+      }
+
+      mediaRecorder.ondataavailable = (e) => {
+        if (e.data.size > 0) recordedChunks.push(e.data);
+      };
+
+      mediaRecorder.onstop = () => {
+        const blob = new Blob(recordedChunks, { type: 'video/webm' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `video-slides-${Date.now()}.webm`;
+        a.click();
+      };
+
+      mediaRecorder.start();
+      exportVideoText.textContent = "Recording...";
+
+      currentSceneIndex = 0;
+      startPlayback();
+
+      const totalDur = calculateTotalDuration() / playbackSpeed;
+      setTimeout(() => {
+        if (mediaRecorder && mediaRecorder.state === 'recording') {
+          mediaRecorder.stop();
+          exportVideoText.textContent = "Export Video (WebM)";
+        }
+      }, totalDur * 1000 + 500);
+    });
+
+    // Manifest JSON Modal
+    viewManifestBtn.addEventListener('click', () => {
+      modalJsonContent.textContent = JSON.stringify(manifestData || { error: "No manifest generated yet" }, null, 2);
+      manifestModal.classList.remove('hidden');
+    });
+
+    closeModalBtn.addEventListener('click', () => manifestModal.classList.add('hidden'));
+
+    copyManifestModalBtn.addEventListener('click', async () => {
+      if (manifestData) {
+        await navigator.clipboard.writeText(JSON.stringify(manifestData, null, 2));
+        copyManifestModalBtn.textContent = "Copied!";
+        setTimeout(() => { copyManifestModalBtn.textContent = "Copy JSON"; }, 2000);
+      }
+    });
+
+    // Initialization
+    window.addEventListener('DOMContentLoaded', () => {
+      const canvas = document.getElementById('visual-canvas');
+      canvasEngine = new VisualCanvasEngine(canvas);
+      scriptInput.value = PRESETS.cyber;
+      updateWordCount();
+      generateBtn.click();
+    });
+  </script>
+</body>
+</html>

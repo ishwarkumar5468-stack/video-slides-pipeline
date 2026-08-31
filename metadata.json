@@ -1,0 +1,6 @@
+{
+  "name": "Video Slides Pipeline",
+  "description": "Script-to-animated-slides pipeline: scene breakdown, visuals, style, animation tags, SFX tags, and render manifest generation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

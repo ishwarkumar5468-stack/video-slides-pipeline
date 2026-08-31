@@ -13,6 +13,7 @@ dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(express.static("public"));
 
 // Serve from any device on your network, including a tablet browser
 app.post("/api/generate", async (req, res) => {
@@ -50,6 +51,6 @@ app.post("/api/generate", async (req, res) => {
 app.get("/health", (req, res) => res.json({ ok: true }));
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Pipeline server running on port ${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Pipeline server running on http://0.0.0.0:${PORT}`);
 });
